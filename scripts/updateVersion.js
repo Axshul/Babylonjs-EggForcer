@@ -35,7 +35,7 @@ const getNewVersion = () => {
 };
 
 const updateEngineVersion = async (version) => {
-    // get thinEngine.ts
+    // Get Thin Engine
     const abstractEngineFile = path.join(baseDirectory, "packages", "dev", "core", "src", "Engines", "abstractEngine.ts");
     const abstractEngineData = fs.readFileSync(abstractEngineFile, "utf-8");
     const array = /"babylonjs@(.*)"/.exec(abstractEngineData);
@@ -114,9 +114,9 @@ async function runTagsUpdate() {
     const version = getNewVersion();
     // // update engine version
     await updateEngineVersion(version);
-    // generate changelog
+    // Changelog
     await generateChangelog(version);
-    // update since tags
+    // update with TAGS
     updateSinceTag(version);
     // if major, update peer dependencies
     if (config.versionDefinition === "major") {
@@ -137,3 +137,4 @@ if (!branchName) {
 } else {
     runTagsUpdate();
 }
+
