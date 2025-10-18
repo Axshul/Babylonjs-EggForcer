@@ -38,6 +38,10 @@ import { NodeRenderGraphMotionBlurPostProcessBlock } from "core/FrameGraph/Node/
 import { NodeRenderGraphConvolutionPostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/convolutionPostProcessBlock";
 import { NodeRenderGraphSharpenPostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/sharpenPostProcessBlock";
 import { NodeRenderGraphScreenSpaceCurvaturePostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/screenSpaceCurvaturePostProcessBlock";
+import { NodeRenderGraphColorCorrectionPostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/colorCorrectionPostProcessBlock";
+import { NodeRenderGraphFilterPostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/filterPostProcessBlock";
+import { NodeRenderGraphTonemapPostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/tonemapPostProcessBlock";
+import { NodeRenderGraphSSAO2PostProcessBlock } from "core/FrameGraph/Node/Blocks/PostProcesses/ssao2PostProcessBlock";
 
 /**
  * Static class for BlockTools
@@ -174,6 +178,18 @@ export class BlockTools {
             }
             case "ScreenSpaceCurvatureBlock": {
                 return new NodeRenderGraphScreenSpaceCurvaturePostProcessBlock("Screen Space Curvature", frameGraph, scene);
+            }
+            case "ColorCorrectionBlock": {
+                return new NodeRenderGraphColorCorrectionPostProcessBlock("Color Correction", frameGraph, scene, "https://assets.babylonjs.com/textures/co.png");
+            }
+            case "FilterBlock": {
+                return new NodeRenderGraphFilterPostProcessBlock("Filter", frameGraph, scene);
+            }
+            case "TonemapBlock": {
+                return new NodeRenderGraphTonemapPostProcessBlock("Tonemap", frameGraph, scene);
+            }
+            case "SSAO2Block": {
+                return new NodeRenderGraphSSAO2PostProcessBlock("SSAO", frameGraph, scene);
             }
         }
 
