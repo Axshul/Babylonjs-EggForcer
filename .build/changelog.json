@@ -1,6 +1,565 @@
 {
-    "fromTag": "8.32.1",
+    "fromTag": "8.33.1",
     "changelog": {
+        "8.33.2": [
+            {
+                "pr": "17340",
+                "title": "QuaternionPropertyLine bug fix",
+                "description": "- Don't send 'rad' for units\r\n- Ensure udpated when props.value changes",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/sharedUiComponents/src/fluent/hoc/propertyLines/vectorPropertyLine.tsx"
+                ],
+                "tags": [
+                    "bug",
+                    "inspector",
+                    "tools"
+                ]
+            },
+            {
+                "pr": "17334",
+                "title": "useLargeWorldRendering on engine enables floatingOrigin and highMatrixPrecision. Add ability to useFloatingOrigin per-scene",
+                "description": "This PR solves 2 major bugs in floatingoriginmode. \r\n- Previously I was updating the creationOptions object but that didn't actually update the underlying performanceConfigurator's precision, so we were getting CPU-side calculation imprecision. \r\n- Additionally, the floatingOriginOffset value was tied to the most recently created scene's active camera, and didn't support multi-scene.\r\n\r\nAfter this change:\r\n- engine creation **useLargeWorldRendering** will both set useHighPrecisionMatrix on engine and set all scenes to useFloatingOrigin upon creation\r\n- scene creation **useFloatingOrigin** can be used instead of the above if user wants only some scenes to useFloatingOrigin (doing this can improve perf for scenes that are not large worlds as we skip matrix offsetting). If this option is used, must be used in conjunction with engine's useHighPrecisionMatrix to achieve full precision)\r\n- offset will always be tied to the current rendering scene's active camera\r\n\r\nTested with this playground [#P3E9YP#255 ](https://playground.babylonjs.com/?snapshot=refs/pull/17334/merge#P3E9YP#255)\r\nwhich enables swapping between scenes and testing combinations of floatingOrigin on / off\r\n",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Engines/abstractEngine.ts",
+                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts",
+                    "packages/dev/core/src/scene.ts",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": [
+                    "bug",
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17338",
+                "title": "FloatingOrigin: fix returned eyePos offset",
+                "description": "My change yesterday updated how offset was applied (to improve perf) but accidentally returned the offset eyePos instead of the non-offset eyePos, causing visual inconsistency in floatingoriginmode. \r\n\r\nSide note: the atmosphere visual tests didn't catch this, maybe because the color is too similar? Something to tackle in another PR",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/scene.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            }
+        ],
+        "8.33.1": [
+            {
+                "pr": "17337",
+                "title": "Playground: Fix tab handling regression from Monaco update",
+                "description": "The Playground [Editor v2](https://github.com/BabylonJS/Babylon.js/pull/17216) updated Monaco which regressed the [workaround ](https://github.com/BabylonJS/Babylon.js/pull/16741/)for tab handling, where when Inspector v2 is open, pressing the tab key while focus is in the code editor moves focus instead of inserting a tab character. To work around this, we added the contentEditable attribute to the actual Monaco html element that has keyboard focus when editing text, but that element has changed in the newer Monaco, so the workaround needs to be updated. Also, the Editor v2 PR removed the comment explaining the workaround, so I just re-added it from the original change.\r\n\r\n@knervous ",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "package-lock.json",
+                    "packages/dev/inspector-v2/package.json",
+                    "packages/public/@babylonjs/inspector-v2/package.json",
+                    "packages/tools/playground/src/components/editor/monacoComponent.tsx"
+                ],
+                "tags": [
+                    "bug",
+                    "inspector",
+                    "Playground"
+                ]
+            },
+            {
+                "pr": "17336",
+                "title": "Inspector v2: Update to the latest fluent virtualizer (bug fix + react 19)",
+                "description": "This PR updates the Fluent virtualizer package to the latest, which includes a fix for a [regression](https://github.com/microsoft/fluentui-contrib/issues/526) and supports React 19 (from the [forum](https://forum.babylonjs.com/t/introducing-inspector-v2/60937/11)).",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "package-lock.json",
+                    "packages/dev/inspector-v2/package.json",
+                    "packages/public/@babylonjs/inspector-v2/package.json"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            }
+        ],
+        "8.33.0": [
+            {
+                "pr": "17308",
+                "title": "OpenPBR Fuzz layer",
+                "description": "This implements the OpenPBR fuzz slab for prefiltered and realtime filtered IBL as well as analytic lights.\r\n\r\nOpenPBR uses this model and I've generated and included the LUT for it:\r\nhttps://github.com/tizian/ltc-sheen?tab=readme-ov-file",
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/PBR/index.ts",
+                    "packages/dev/core/src/Materials/PBR/openpbrMaterial.ts",
+                    "packages/dev/core/src/Misc/brdfTextureTools.ts",
+                    "packages/dev/core/src/Rendering/IBLShadows/iblShadowsPluginMaterial.ts",
+                    "packages/dev/core/src/Rendering/IBLShadows/iblShadowsRenderPipeline.ts",
+                    "packages/dev/core/src/Rendering/geometryBufferRenderer.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrBaseLayerData.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrDirectLighting.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrEnvironmentLighting.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrFragmentDeclaration.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrFragmentSamplersDeclaration.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrFuzzLayerData.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrGeometryInfo.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrNormalMapFragment.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrNormalMapFragmentMainFunctions.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrNormalMapVertex.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrNormalMapVertexDeclaration.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrUboDeclaration.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrVertexDeclaration.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/pbrBRDFFunctions.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/pbrDirectLightingFunctions.fx",
+                    "packages/dev/core/src/Shaders/openpbr.fragment.fx",
+                    "packages/dev/core/src/Shaders/openpbr.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrBaseLayerData.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrDirectLighting.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrEnvironmentLighting.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrFragmentSamplersDeclaration.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrFuzzLayerData.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrGeometryInfo.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrNormalMapFragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrNormalMapFragmentMainFunctions.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrNormalMapVertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrNormalMapVertexDeclaration.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrUboDeclaration.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/pbrBRDFFunctions.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/pbrDirectLightingFunctions.fx",
+                    "packages/dev/core/src/ShadersWGSL/openpbr.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/openpbr.vertex.fx",
+                    "packages/dev/core/src/scene.ts",
+                    "packages/dev/inspector-v2/src/components/properties/materials/openpbrMaterialProperties.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/properties/materialPropertiesService.tsx",
+                    "packages/dev/inspector/src/components/actionTabs/tabs/propertyGridTabComponent.tsx",
+                    "packages/dev/inspector/src/components/actionTabs/tabs/propertyGrids/materials/openpbrMaterialPropertyGridComponent.tsx",
+                    "packages/dev/loaders/src/glTF/2.0/glTFLoader.ts",
+                    "packages/dev/loaders/src/glTF/2.0/index.ts",
+                    "packages/dev/loaders/src/glTF/2.0/openpbrMaterialLoadingAdapter.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_anisotropy.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_anisotropy.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_color.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_darkening.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_ior.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_diffuse_roughness.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_iridescence.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_specular.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFExporter.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFMaterialExporter.ts",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Fuzz-Weight-vs-Coat-Weight-with-Normal-Maps---Analytic-Lights.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Fuzz-Weight-vs-Coat-Weight-with-Normal-Maps---IBL.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Fuzz-Weight-vs-Fuzz-Roughness---Analytic-Lights.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Fuzz-Weight-vs-Fuzz-Roughness---Furnace-Test.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Fuzz-Weight-vs-Fuzz-Roughness---IBL.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Fuzz-Weight-vs-Fuzz-Roughness---Realtime-IBL.png",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17333",
+                "title": "Inspector v2: Side pane re-docking",
+                "description": "This is the first part of Inspector v2 \"window management,\" which is allowing the user to move each pane/tab to any \"quadrant\" they want (top left, top right, bottom left, bottom right). It includes a bunch of the base changes needed for \"undocking\" (popping out to floating windows), which will be done in a different PR.\r\n\r\n- Rework how individual side panes are rendered. Now they are rendered in a React portal that is mounted to a dom node that is not managed by React, but is reparented to the right \"quadrant\" depending on dock state and tab selection state. This makes it so that each pane is mounted only once - it is not unmounted/remounted when tab selection changes or when it is redocked. This means the user keeps the current state, like the expansion and selection state of scene explorer for example.\r\n- Add the concept of pane \"location\" overrides that are persisted in local storage. When a pane is \"re-docked,\" these overrides are updated and take precedence.\r\n- Add a \"...\" button the right side of the pane header that has a docking menu.\r\n- Add the same docking menu as a context menu on the tabs themselves.\r\n- In a future change, we may allow multi-select on the tabs so you can easily redock multiple tabs at once (like Chrome/Edge for example).\r\n\r\nHere are some screenshots that give a sense of the behavior:\r\n<img width=\"1044\" height=\"829\" alt=\"image\" src=\"https://github.com/user-attachments/assets/81bd3c27-fb25-40a6-b664-37dfa2d9d31e\" />\r\n<img width=\"1039\" height=\"826\" alt=\"image\" src=\"https://github.com/user-attachments/assets/55838809-b6b5-48b8-88b7-75f589aa3284\" />\r\n<img width=\"1040\" height=\"829\" alt=\"image\" src=\"https://github.com/user-attachments/assets/02a90399-b552-41f8-8881-f7dcadbb2551\" />\r\n<img width=\"1040\" height=\"830\" alt=\"image\" src=\"https://github.com/user-attachments/assets/2690bce2-1296-4493-9ee3-e6406ba7fe7c\" />\r\n<img width=\"1043\" height=\"831\" alt=\"image\" src=\"https://github.com/user-attachments/assets/151d21f2-dde1-4c79-919c-d6decf4d33ca\" />\r\n<img width=\"500\" height=\"235\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7b6dd973-3b61-4545-aec8-f3856cdd2e8b\" />\r\n",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/hooks/settingsHooks.ts",
+                    "packages/dev/inspector-v2/src/hooks/useResizeHandle.ts",
+                    "packages/dev/inspector-v2/src/inspector.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/settingsService.tsx",
+                    "packages/dev/inspector-v2/src/services/shellService.tsx"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17335",
+                "title": "Smart Filter Editor: fix scrollbar to prevent frequent canvas resizes",
+                "description": "The preview was included in the scroll region, unlike the other editors, so when it got a vertical scrollbar, that changed the width of the preview which caused the engine to resize.  Now SFE behaves like the other editors, and the preview doesn't scroll off screen and isn't affected by the scrollbar.",
+                "author": {
+                    "name": "AmoebaChant",
+                    "url": "https://github.com/AmoebaChant"
+                },
+                "files": [
+                    "packages/tools/smartFiltersEditorControl/src/assets/styles/main.scss"
+                ],
+                "tags": []
+            }
+        ],
+        "8.32.3": [
+            {
+                "pr": "17332",
+                "title": "Store FloatingOrigin in local var vs copying to temp vect",
+                "description": "Even better-- avoid copying offset to new vect and just store in local var :) ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Lights/Clustered/clusteredLightContainer.ts",
+                    "packages/dev/core/src/Lights/pointLight.ts",
+                    "packages/dev/core/src/Lights/rectAreaLight.ts",
+                    "packages/dev/core/src/Lights/spotLight.ts",
+                    "packages/dev/core/src/Meshes/mesh.ts",
+                    "packages/dev/core/src/Rendering/boundingBoxRenderer.ts",
+                    "packages/dev/core/src/Rendering/edgesRenderer.ts",
+                    "packages/dev/core/src/scene.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17316",
+                "title": "Gaussian Splatting Shadows",
+                "description": null,
+                "author": {
+                    "name": "CedricGuillemet",
+                    "url": "https://github.com/CedricGuillemet"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/GaussianSplatting/gaussianSplattingMaterial.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/gaussianSplatting.fx",
+                    "packages/dev/core/src/Shaders/gaussianSplattingDepth.fragment.fx",
+                    "packages/dev/core/src/Shaders/gaussianSplattingDepth.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/gaussianSplatting.fx",
+                    "packages/dev/core/src/ShadersWGSL/gaussianSplattingDepth.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/gaussianSplattingDepth.vertex.fx",
+                    "packages/tools/tests/test/visualization/ReferenceImages/gsplat-shadows.png",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": [
+                    "Gaussian Splatting"
+                ]
+            },
+            {
+                "pr": "17331",
+                "title": "Reduce frequency of accessing floatingOriginOffset to maximize perf",
+                "description": "Small change to store floatingOriginOffset in temp var instead of accessing 3x/offset ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Lights/Clustered/clusteredLightContainer.ts",
+                    "packages/dev/core/src/Lights/pointLight.ts",
+                    "packages/dev/core/src/Lights/rectAreaLight.ts",
+                    "packages/dev/core/src/Lights/spotLight.ts",
+                    "packages/dev/core/src/scene.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17330",
+                "title": "FrameGraph: Fix TAA",
+                "description": "I forgot to uncomment some code before commiting in #17326...\r\n\r\nRetrying to enable the visu test, in case it now works with the CI...",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/PostProcesses/thinTAAPostProcess.ts",
+                    "packages/tools/tests/test/visualization/ReferenceImages/FrameGraph-TAA-reproject-history.png",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": [
+                    "bug",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17328",
+                "title": "Add support for instances in FloatingOriginMode",
+                "description": "Instances are positioned by combining world0, world1, world2, and world3 attributes, vs using the standard world mat4 uniform. We thus need to do special offset to the buffer data to ensure the instances are positioned properly.\r\n\r\nI experimented with a couple approaches and this was the one that had least perf impact and simplest code (compared to overriding prototype of buffer / vertex buffer in order to achieve this behavior) \r\n\r\nBoth boundingBoxRenderer and edgesRenderer also support instances, so they needed offset logic as well.\r\n\r\nTested with the below playground snippets\r\nthin instances: /#V1JE4Z#1 \r\ninstances: /#PB1NS6#264\r\nboundingbox rendering: /#NRNVQA#4\r\nedges rendering: /#7BY3TM",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Meshes/mesh.ts",
+                    "packages/dev/core/src/Rendering/boundingBoxRenderer.ts",
+                    "packages/dev/core/src/Rendering/edgesRenderer.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17326",
+                "title": "FrameGraph: Implement TAA as a post process",
+                "description": "This is a better implementation than the previous one (which was implemented as a renderer) because it is now possible to insert other processes (such as post-processes) between scene rendering and the TAA effect (which is also possible with the standard TAA implementation, outside of frame graphs).\r\n\r\nI also added support for the new `clampHistory` and `reprojectHistory` properties in the new TAA frame graph task.\r\n\r\nThere is one breaking change in this PR: `Material.setVertexOutputInvariant` has been renamed to `Material.isVertexOutputInvariant`. I don't think this is a problem, as this property is fairly new and very specific, and I don't think anyone is using it yet.",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Layers/glowLayerBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/taaPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Rendering/geometryRendererBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Rendering/taaObjectRendererBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/index.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/postProcessTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/taaTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/taaObjectRendererTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphTextureManager.ts",
+                    "packages/dev/core/src/FrameGraph/index.ts",
+                    "packages/dev/core/src/Materials/Background/backgroundMaterial.ts",
+                    "packages/dev/core/src/Materials/GaussianSplatting/gaussianSplattingMaterial.ts",
+                    "packages/dev/core/src/Materials/PBR/openPbrMaterial.ts",
+                    "packages/dev/core/src/Materials/PBR/pbrBaseMaterial.ts",
+                    "packages/dev/core/src/Materials/material.ts",
+                    "packages/dev/core/src/Materials/standardMaterial.ts",
+                    "packages/dev/core/src/PostProcesses/RenderPipeline/Pipelines/taaMaterialManager.ts",
+                    "packages/dev/core/src/PostProcesses/RenderPipeline/Pipelines/taaRenderingPipeline.ts",
+                    "packages/dev/core/src/PostProcesses/thinTAAPostProcess.ts",
+                    "packages/dev/inspector-v2/src/components/properties/materials/materialProperties.tsx",
+                    "packages/dev/materials/src/cell/cellMaterial.ts",
+                    "packages/dev/materials/src/fur/furMaterial.ts",
+                    "packages/dev/materials/src/gradient/gradientMaterial.ts",
+                    "packages/dev/materials/src/grid/gridMaterial.ts",
+                    "packages/dev/materials/src/lava/lavaMaterial.ts",
+                    "packages/dev/materials/src/mix/mixMaterial.ts",
+                    "packages/dev/materials/src/normal/normalMaterial.ts",
+                    "packages/dev/materials/src/shadowOnly/shadowOnlyMaterial.ts",
+                    "packages/dev/materials/src/simple/simpleMaterial.ts",
+                    "packages/dev/materials/src/sky/skyMaterial.ts",
+                    "packages/dev/materials/src/terrain/terrainMaterial.ts",
+                    "packages/dev/materials/src/triPlanar/triPlanarMaterial.ts",
+                    "packages/dev/materials/src/water/waterMaterial.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/blockTools.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/tests/test/visualization/ReferenceImages/FrameGraph-TAA-reproject-history.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/FrameGraph-nrge-TAA.png",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": [
+                    "enhancement",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17327",
+                "title": "Minor typo",
+                "description": null,
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Maths/math.vector.ts"
+                ],
+                "tags": [
+                    "documentation"
+                ]
+            },
+            {
+                "pr": "17323",
+                "title": "Update baseSlider.ts to send target/currentTarget to onValueChangedObservable",
+                "description": "Added target and currentTarget properties to slider onValueChangedObservable.\r\n\r\nTest with this playground: https://playground.babylonjs.com/?snapshot=refs%2Fpull%2F17323%2Fmerge#UBZNMP%230\r\n\r\nSee this forum post for more details: https://forum.babylonjs.com/t/obtain-gui-component-within-onvaluechangedobservable-on-slider-and-colorpicker/61045/6",
+                "author": {
+                    "name": "HiGregSmith",
+                    "url": "https://github.com/HiGregSmith"
+                },
+                "files": [
+                    "packages/dev/gui/src/2D/controls/sliders/baseSlider.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17322",
+                "title": "Update colorpicker.ts onValueChanged enabled second parameter, event/state",
+                "description": "Added target and currentTarget properties to ColorPicker onValueChangedObservable.\r\n\r\nTest with this playground: https://playground.babylonjs.com/?snapshot=refs/pull/17322/merge#ZMLBW6#8 \r\n\r\nSee this forum post for more details: https://forum.babylonjs.com/t/obtain-gui-component-within-onvaluechangedobservable-on-slider-and-colorpicker/61045/8",
+                "author": {
+                    "name": "HiGregSmith",
+                    "url": "https://github.com/HiGregSmith"
+                },
+                "files": [
+                    "packages/dev/gui/src/2D/controls/colorpicker.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17324",
+                "title": "Bump vite from 6.3.6 to 6.4.1",
+                "description": "Bumps [vite](https://github.com/vitejs/vite/tree/HEAD/packages/vite) from 6.3.6 to 6.4.1.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/vitejs/vite/releases\">vite's releases</a>.</em></p>\n<blockquote>\n<h2>create-vite@6.4.1</h2>\n<p>Please refer to <a href=\"https://github.com/vitejs/vite/blob/create-vite@6.4.1/packages/create-vite/CHANGELOG.md\">CHANGELOG.md</a> for details.</p>\n<h2>v6.4.1</h2>\n<p>Please refer to <a href=\"https://github.com/vitejs/vite/blob/v6.4.1/packages/vite/CHANGELOG.md\">CHANGELOG.md</a> for details.</p>\n<h2>create-vite@6.4.0</h2>\n<p>Please refer to <a href=\"https://github.com/vitejs/vite/blob/create-vite@6.4.0/packages/create-vite/CHANGELOG.md\">CHANGELOG.md</a> for details.</p>\n<h2>v6.4.0</h2>\n<p>Please refer to <a href=\"https://github.com/vitejs/vite/blob/v6.4.0/packages/vite/CHANGELOG.md\">CHANGELOG.md</a> for details.</p>\n<h2>v6.3.7</h2>\n<p>Please refer to <a href=\"https://github.com/vitejs/vite/blob/v6.3.7/packages/vite/CHANGELOG.md\">CHANGELOG.md</a> for details.</p>\n</blockquote>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/vitejs/vite/commit/50034340401b4043bb0b158f18ffb7ae1b7f5c86\"><code>5003434</code></a> fix(preview): use host url to open browser (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19836\">#19836</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/bf9728e79e8df905de457e15001e65e33cf13f0e\"><code>bf9728e</code></a> release: v6.3.0-beta.2</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/380c10e665e78ef732a8d7b6c8f60a1226fc4c3b\"><code>380c10e</code></a> fix(hmr): run HMR handler sequentially (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19793\">#19793</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/8bed1de5710f2a097af0e22a196545446d98f988\"><code>8bed1de</code></a> fix: addWatchFile doesn't work if base is specified (fixes <a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19792\">#19792</a>) (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19794\">#19794</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/0a0c50a7ed38017469ed6dcec941c2d8d0efd0d0\"><code>0a0c50a</code></a> refactor: simplify pluginFilter implementation (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19828\">#19828</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/59d0b35b30f3a38be33c0a9bdc177945b6f7eb1b\"><code>59d0b35</code></a> perf(css): avoid constructing <code>renderedModules</code> (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19775\">#19775</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/175a83909f02d3b554452a7bd02b9f340cdfef70\"><code>175a839</code></a> fix: reject requests with <code>#</code> in request-target (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19830\">#19830</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/e2e11b15a6083777ee521e26a3f79c3859abd411\"><code>e2e11b1</code></a> fix(module-runner): allow already resolved id as entry (<a href=\"https://github.com/vitejs/vite/tree/HEAD/packages/vite/issues/19768\">#19768</a>)</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/7200deec91a501fb84734e23906f80808734540c\"><code>7200dee</code></a> fix: correct the behavior when multiple transform filter options are specifie...</li>\n<li><a href=\"https://github.com/vitejs/vite/commit/b1251720d47f15615ea354991cdaa90d9a94aae5\"><code>b125172</code></a> fix(css): remove empty chunk imports correctly when chunk file name contained...</li>\n<li>Additional commits viewable in <a href=\"https://github.com/vitejs/vite/commits/create-vite@6.4.1/packages/vite\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=vite&package-manager=npm_and_yarn&previous-version=6.3.6&new-version=6.4.1)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot merge` will merge this PR after your CI passes on it\n- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it\n- `@dependabot cancel merge` will cancel a previously requested merge and block automerging\n- `@dependabot reopen` will reopen this PR if it is closed\n- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\nYou can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/BabylonJS/Babylon.js/network/alerts).\n\n</details>",
+                "author": {
+                    "name": "dependabot[bot]",
+                    "url": "https://github.com/apps/dependabot"
+                },
+                "files": [
+                    "package-lock.json"
+                ],
+                "tags": [
+                    "dependencies",
+                    "javascript"
+                ]
+            },
+            {
+                "pr": "17325",
+                "title": "Morph target manager: Optimize calls to _syncActiveTargets",
+                "description": "See https://forum.babylonjs.com/t/morphtargetmanager-syncactivetargets-called-multiple-time-pre-frame/61055/2",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Morph/morphTargetManager.ts"
+                ],
+                "tags": [
+                    "enhancement",
+                    "rendering engine"
+                ]
+            },
+            {
+                "pr": "17321",
+                "title": "Add a new ParseFile to stay consistent",
+                "description": null,
+                "author": {
+                    "name": "deltakosh",
+                    "url": "https://github.com/deltakosh"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17319",
+                "title": "Viewer: Make keyboard zoom sensitivity consistent across model sizes/scales",
+                "description": "This change automatically adjusts the camera's `zoomingSensibility` based on camera radius (similar to a few other properties) to make the zooming feel consistent regardless of the size/scale of the model or how far away the camera currently is from the model.",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/tools/viewer/src/viewer.ts"
+                ],
+                "tags": [
+                    "viewer"
+                ]
+            },
+            {
+                "pr": "17317",
+                "title": "Inspector v2: Add Dispose button for any disposable in the properties pane",
+                "description": "This is in response to https://forum.babylonjs.com/t/introducing-inspector-v2/60937/54\r\n\r\nInstead of selectively adding a Dispose button in the properties pane for some entities, we now add a Dispose button to the bottom of the General section for any entity that implements `IDisposable` (e.g. has a `dispose` function).\r\n\r\nAlso a tiny bit of cleanup from a recent PR that uses `Collapse` instead of conditionally rendering a component, and uses Title Case for property labels.",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/components/properties/commonGeneralProperties.tsx",
+                    "packages/dev/inspector-v2/src/components/properties/materials/materialProperties.tsx",
+                    "packages/dev/inspector-v2/src/components/properties/nodes/abstractMeshProperties.tsx",
+                    "packages/dev/inspector-v2/src/components/properties/postProcesses/postProcessProperties.tsx",
+                    "packages/dev/inspector-v2/src/components/properties/sprites/spriteManagerProperties.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/properties/commonPropertiesService.tsx"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17216",
+                "title": "Playground Editor V2: Multi-file, ES modules, NPM Support + Build output hashing",
+                "description": " Follow-up to the original PR https://github.com/BabylonJS/Babylon.js/pull/17175\r\n \r\nThe different issues pointed out by different people on the [BJS forum post](https://forum.babylonjs.com/t/babylonjs-playground-multiple-files-with-tabs-esm-npm-imports/60446/44) point to a caching issue - some scripts were loaded fresh while others were stale and cached by the browser. This led to undefined behavior all around and the page would be effectively \"broken\" depending on which assets were cached or not, i.e. *anything* could go wrong and wouldn't necessarily present as a predictable bug.\r\n\r\nPreviously there were duplicate names from the dist output and monaco worker output which is cached locally in a browser:\r\n<img width=\"1111\" height=\"792\" alt=\"image\" src=\"https://github.com/user-attachments/assets/f0051fe9-8619-4fd7-9549-9ecfc3ba54fc\" />\r\n\r\nindex.html does not have a Cache-Control response header and respects the client's request of `max-age=0` - this is good. index.html should always fetch the latest.\r\n\r\nIt also appears there is a CDN purge script running on the Playground deployment script, although I don't have access to the CI yaml. https://dev.azure.com/babylonjs/ContinousIntegration/_build/results?buildId=44262&view=logs&j=275f1d19-1bd8-5591-b06b-07d489ea915a&t=4d2ea636-6e6e-5831-8b5a-8ce5e9ce8bbc\r\nIf that's the case for the last operation in that script, good. CDN purge handles the server cache.\r\n\r\nTakeaway from the existing deployment pipeline and CDN architecture, nothing needs to change. If we can guarantee unique output from a build each time, there is no room for cache confusion from the client's browser. This only applies to the Playground and I haven't looked into other deployed apps. Cache-Control of 2 days is fine. Eventually this issue would've sorted itself out in the field but 2 days is a long time to wait with undefined/broken behavior.\r\n\r\nThe additional changes in this PR are consolidated in these two commits:\r\n\r\nhttps://github.com/BabylonJS/Babylon.js/commit/1e9c765b92ea3a473528fbdf9726edd91e20dbbc\r\nhttps://github.com/knervous/Babylon.js/commit/bd197e8859b88c87491eacfadc65143ab4a4e160\r\n\r\nThese changes ensure hashed output from every build and deploy for relevant bundled js files. The generated entrypoint for `babylon.playground.[hash].js` is injected into the index.html with the WebpackHTMLPlugin. The helper function for fetching scripts does append a query parameter to bust cache, but dependent chunks of scripts do not automatically follow the same convention. Ideally we can get rid of that `?t=[timestamp]` and let caching do its business. \r\n\r\n\r\nFor anyone testing changes, please check https://playgroundv2.vercel.app which should be the exact hosted bundle set from the deployment build.\r\n\r\nFor sanity's sake here are three browsers on mobile tested with the current code: Edge, Firefox and Chrome\r\n\r\n<img width=\"216\" height=\"480\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7118d10b-ed77-4fe3-8f48-60f146acdc36\" />\r\n<img width=\"216\" height=\"480\" alt=\"image\" src=\"https://github.com/user-attachments/assets/67873f33-313d-49ce-8070-82dcce064f81\" />\r\n<img width=\"216\" height=\"480\" alt=\"image\" src=\"https://github.com/user-attachments/assets/4fe5ff47-98b3-4f7f-abbd-3a248a469387\" />\r\n\r\n\r\n\r\nWith editor open:\r\n\r\n\r\n\r\n<img width=\"216\" height=\"480\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9191ac9a-23b0-4d42-943c-2ba9d56127a0\" />\r\n\r\n\r\n",
+                "author": {
+                    "name": "knervous",
+                    "url": "https://github.com/knervous"
+                },
+                "files": [
+                    "package-lock.json",
+                    "packages/tools/playground/index.html",
+                    "packages/tools/playground/package.json",
+                    "packages/tools/playground/public/index.js",
+                    "packages/tools/playground/public/zipContent/index.html",
+                    "packages/tools/playground/src/components/commandBarComponent.tsx",
+                    "packages/tools/playground/src/components/editor/activityBarComponent.tsx",
+                    "packages/tools/playground/src/components/editor/fileDialog.tsx",
+                    "packages/tools/playground/src/components/editor/fileExplorerComponent.tsx",
+                    "packages/tools/playground/src/components/editor/iconComponent.tsx",
+                    "packages/tools/playground/src/components/editor/icons/caseSensitive.svg",
+                    "packages/tools/playground/src/components/editor/icons/files.svg",
+                    "packages/tools/playground/src/components/editor/icons/history.svg",
+                    "packages/tools/playground/src/components/editor/icons/newFile.svg",
+                    "packages/tools/playground/src/components/editor/icons/regex.svg",
+                    "packages/tools/playground/src/components/editor/icons/replace.svg",
+                    "packages/tools/playground/src/components/editor/icons/replaceAll.svg",
+                    "packages/tools/playground/src/components/editor/icons/search.svg",
+                    "packages/tools/playground/src/components/editor/icons/wholeWord.svg",
+                    "packages/tools/playground/src/components/editor/localSessionDialog.tsx",
+                    "packages/tools/playground/src/components/editor/monacoComponent.tsx",
+                    "packages/tools/playground/src/components/editor/searchPanelComponent.tsx",
+                    "packages/tools/playground/src/components/hamburgerMenu.tsx",
+                    "packages/tools/playground/src/components/monacoComponent.tsx",
+                    "packages/tools/playground/src/components/rendererComponent.tsx",
+                    "packages/tools/playground/src/custom.d.ts",
+                    "packages/tools/playground/src/globalState.ts",
+                    "packages/tools/playground/src/playground.tsx",
+                    "packages/tools/playground/src/scss/commandBar.scss",
+                    "packages/tools/playground/src/scss/dialogs.scss",
+                    "packages/tools/playground/src/scss/editor.scss",
+                    "packages/tools/playground/src/scss/footer.scss",
+                    "packages/tools/playground/src/scss/monaco.scss",
+                    "packages/tools/playground/src/scss/rendering.scss",
+                    "packages/tools/playground/src/scss/search.scss",
+                    "packages/tools/playground/src/tools/downloadManager.ts",
+                    "packages/tools/playground/src/tools/loadManager.ts",
+                    "packages/tools/playground/src/tools/localSession.ts",
+                    "packages/tools/playground/src/tools/monaco/analysis/codeAnalysisService.ts",
+                    "packages/tools/playground/src/tools/monaco/codeLens/codeLensProvider.ts",
+                    "packages/tools/playground/src/tools/monaco/completion/completionService.ts",
+                    "packages/tools/playground/src/tools/monaco/completion/templatesService.ts",
+                    "packages/tools/playground/src/tools/monaco/editor/editorHost.ts",
+                    "packages/tools/playground/src/tools/monaco/files/filesManager.ts",
+                    "packages/tools/playground/src/tools/monaco/language/colorProvider.ts",
+                    "packages/tools/playground/src/tools/monaco/language/shaderLanguages.ts",
+                    "packages/tools/playground/src/tools/monaco/monacoManager.ts",
+                    "packages/tools/playground/src/tools/monaco/navigation/definitionService.ts",
+                    "packages/tools/playground/src/tools/monaco/navigation/importIndexService.ts",
+                    "packages/tools/playground/src/tools/monaco/run/localPackage.ts",
+                    "packages/tools/playground/src/tools/monaco/run/runner.ts",
+                    "packages/tools/playground/src/tools/monaco/ts/tsPipeline.ts",
+                    "packages/tools/playground/src/tools/monaco/typings/constants.ts",
+                    "packages/tools/playground/src/tools/monaco/typings/tsService.ts",
+                    "packages/tools/playground/src/tools/monaco/typings/types.ts",
+                    "packages/tools/playground/src/tools/monaco/typings/typingsService.ts",
+                    "packages/tools/playground/src/tools/monaco/typings/utils.ts",
+                    "packages/tools/playground/src/tools/monaco/utils/path.ts",
+                    "packages/tools/playground/src/tools/monacoManager.ts",
+                    "packages/tools/playground/src/tools/saveManager.ts",
+                    "packages/tools/playground/src/tools/snippet.ts",
+                    "packages/tools/playground/test/interactions.playground.test.ts",
+                    "packages/tools/playground/tsconfig.json",
+                    "packages/tools/playground/webpack.config.js",
+                    "packages/tools/testTools/src/visualizationUtils.ts",
+                    "packages/tools/tests/test/playwright/visualizationPlaywright.utils.ts",
+                    "packages/tools/tests/test/visualization/ReferenceImages/Specular-Reflectance-with-IOR-V2-Manifest.png",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": []
+            }
+        ],
         "8.32.2": [
             {
                 "pr": "17315",
