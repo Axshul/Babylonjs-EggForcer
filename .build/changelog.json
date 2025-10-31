@@ -1,6 +1,445 @@
 {
-    "fromTag": "8.33.1",
+    "fromTag": "8.33.4",
     "changelog": {
+        "8.33.4": [
+            {
+                "pr": "17348",
+                "title": "Add shadow generator / cascaded shadow generator support",
+                "description": "ShadowGenerator uses scene's view/projection matrix to set uniform values, however the offset logic assumes viewmatrix is centered at 0, so we must apply true viewmatrix offset when within shadowgenerator (i.e. when eye is not at origin).\r\n\r\nWe also offst lightMatrix+i manually because we cannot rely on the scene's viewmatrix/projectionmatrix at this point. \r\n\r\nTest with https://playground.babylonjs.com/?snapshot=refs/pull/17348/merge#IFYDRS#869 and \r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17348/merge#KY0N7T#78 \r\n",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Lights/Shadows/cascadedShadowGenerator.ts",
+                    "packages/dev/core/src/Lights/Shadows/shadowGenerator.ts",
+                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17350",
+                "title": "Smart Filters: fix over-aggressive optimizer validation error when local variable contains a uniform name",
+                "description": "If a local variable in a helper function contained a string matching the decorated version of a uniform name, it would incorrectly think that the helper function was using the uniform and return an error.  For example, if the uniform was \"foo\" the decorated name would be \"_foo_\".  If the function had a parameter called \"foo_bar\" it would become \"_foo_bar_\" and then would incorrectly be confused for the uniform \"_foo_\" and the error would be displayed.  This fixes test to ensure there are non-word character surrounding the match.",
+                "author": {
+                    "name": "AmoebaChant",
+                    "url": "https://github.com/AmoebaChant"
+                },
+                "files": [
+                    "packages/dev/smartFilters/src/optimization/smartFilterOptimizer.ts"
+                ],
+                "tags": []
+            }
+        ],
+        "8.34.0": [
+            {
+                "pr": "17364",
+                "title": "glTF Exporter: Add multimaterial test",
+                "description": "Follow-up to #17241. \nTests export of multimaterials / submaterials / submeshes.\n\n<details>\nMy ulterior motive is to add a glTF exporter test that 1. doesn't use `File` and 2. doesn't use an existing image as a texture. That way, it can double as a smoke test for BN.\n</details>",
+                "author": {
+                    "name": "alexchuber",
+                    "url": "https://github.com/alexchuber"
+                },
+                "files": [
+                    "packages/tools/tests/test/visualization/ReferenceImages/glTFSerializerMultimaterial.png",
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17368",
+                "title": "Add sound `activeInstancesCount` property",
+                "description": "Partially addresses feature request: https://forum.babylonjs.com/t/allow-to-reject-sound-plays-if-maxinstances-number-is-reached/60433",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/abstractAudio/abstractSound.ts",
+                    "packages/dev/core/src/AudioV2/abstractAudio/abstractSoundInstance.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioStreamingSound.ts",
+                    "packages/tools/tests/test/audioV2/shared/abstractSound.activeInstancesCount.ts",
+                    "packages/tools/tests/test/audioV2/staticSound.activeInstancesCount.test.ts",
+                    "packages/tools/tests/test/audioV2/streamingSound.activeInstancesCount.test.ts"
+                ],
+                "tags": [
+                    "audio",
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17367",
+                "title": "Mirror class: Fix resizing the mirror texture",
+                "description": "See https://forum.babylonjs.com/t/mirrortexture-resize-bug-when-blur-kernel-in-use/61198",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/Textures/mirrorTexture.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "materials"
+                ]
+            },
+            {
+                "pr": "17312",
+                "title": "EXT_lights_area updates and export support",
+                "description": "Modifications to the area lights extension (replacing \"shape\" with \"type\" property, etc.) and adding export support.",
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/inspector/src/components/actionTabs/tabs/tools/gltfComponent.tsx",
+                    "packages/dev/inspector/src/components/globalState.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/EXT_lights_area.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/KHR_animation_pointer.data.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/dynamic.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/index.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/objectModelMapping.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/EXT_lights_area.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/index.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFUtilities.ts",
+                    "packages/public/glTF2Interface/babylon.glTF2Interface.d.ts",
+                    "packages/tools/devHost/src/babylon.glTF2Interface.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17277",
+                "title": "Playground: Add fluent code for frame graphs",
+                "description": "I created the PR in draft mode, to let #17216 go first.",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/tools/playground/public/procedural.json",
+                    "packages/tools/playground/public/templates.json",
+                    "packages/tools/playground/src/components/commandBarComponent.tsx",
+                    "packages/tools/playground/src/scss/commandBar.scss"
+                ],
+                "tags": [
+                    "enhancement",
+                    "Playground"
+                ]
+            },
+            {
+                "pr": "17363",
+                "title": "Fix old audio engine mute button showing when `useCustomUnlockedButton` is set",
+                "description": "When `useCustomUnlockedButton` is set to `true` on the old audio engine, it is still getting shown when the audio engine V2 implementation is initialized and it's state gets immediately set to `suspended`.\r\n\r\nThis change fixes the issue by checking the mute button's `enabled` flag before showing it.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioUnmuteUI.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "audio"
+                ]
+            },
+            {
+                "pr": "17349",
+                "title": "bug: do not attempt to update removed xr anchors",
+                "description": "Fixes issue where warning 'Anchor could not be updated' was being generated for just removed anchors.\r\n\r\nChanges\r\n\r\n- added check for removed anchors by checking for invalid index (line 347)\r\n- removed `try-catch` as the only reason it would catch is when an anchor has been removed, which we are now handling\r\n- removed `toRemove` array to simplify anchor removal\r\n",
+                "author": {
+                    "name": "kv-ebender",
+                    "url": "https://github.com/kv-ebender"
+                },
+                "files": [
+                    "packages/dev/core/src/XR/features/WebXRAnchorSystem.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17355",
+                "title": "GS transparent shadows",
+                "description": null,
+                "author": {
+                    "name": "CedricGuillemet",
+                    "url": "https://github.com/CedricGuillemet"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/GaussianSplatting/gaussianSplattingMaterial.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/gaussianSplatting.fx",
+                    "packages/dev/core/src/Shaders/gaussianSplattingDepth.fragment.fx",
+                    "packages/dev/core/src/Shaders/gaussianSplattingDepth.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/gaussianSplatting.fx",
+                    "packages/dev/core/src/ShadersWGSL/gaussianSplattingDepth.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/gaussianSplattingDepth.vertex.fx"
+                ],
+                "tags": [
+                    "skip changelog"
+                ]
+            },
+            {
+                "pr": "17359",
+                "title": "Fix vscode search exclusion of dist folders",
+                "description": "You can still search them by turning off \"Use Exclude Settings and Ignore Files\" in the UI if you want to search the .js output",
+                "author": {
+                    "name": "AmoebaChant",
+                    "url": "https://github.com/AmoebaChant"
+                },
+                "files": [
+                    ".vscode/settings.json"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17358",
+                "title": "Editor v2: Snippet session state and bug fixes",
+                "description": "1. Snippet session state.\r\n- This is on automatically and mirrors some of what VS Code does. IMO it is a good default behavior that shouldn't need to be behind a config flag because if you're working on a PG and have 5 of the files open and refresh the page, you want all those 5 files open still, and to jump back to the active file where the cursor was on your last edit - that's what this PR does.\r\n\r\n2. Error handling logic for older Playgrounds\r\n- This was a bit of a doozy. Older JS engines were quite flexible with a lot of things around variable assignment and scoping, same with the eval JIT JS compiler. Not the case in ES modules, but we do get nice consistent errors when these things happen. This is addressing two issue I saw through examples in the PG:\r\n    - Undefined variables being accessed from RHS. This is like having the line `path = [1,2,3];`. In modern JS, you need to write `var`, `let` or `const` otherwise the compiler will throw. That error is exactly what we can catch and iteratively assign global variables so that it *is* accessible and spits a warning out in the console. Not a pretty solution but don't think there is one.\r\n    - `this` accessing closure or global namespace, I understand people's confusion and frustration with JS from 10 years ago when these sorts of things are allowed to happen:\r\n    ```js\r\n      var scene = new BABYLON.Scene(engine);\r\n\r\n\t// Camera\r\n    camera = new BABYLON.FreeCamera(\"camera1\", new BABYLON.Vector3(0, 0, -10), this.scene);\r\n    // We get a double-whammy here - no variable declaration and accessing `this` which doesn't exist without caller context.\r\n    ```\r\n    - Solution to bind a calling context of a proxy and map the result and known babylon \"instance globals\" just to stop the runtime from complaining, but not as a feature.",
+                "author": {
+                    "name": "knervous",
+                    "url": "https://github.com/knervous"
+                },
+                "files": [
+                    "packages/tools/playground/src/tools/localSession.ts",
+                    "packages/tools/playground/src/tools/monaco/monacoManager.ts",
+                    "packages/tools/playground/src/tools/monaco/run/runner.ts",
+                    "packages/tools/playground/src/tools/monaco/ts/tsPipeline.ts",
+                    "packages/tools/playground/src/tools/snippet.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17351",
+                "title": "Fix intermittent build issue with build:assets:smart-filters",
+                "description": "The build:assets:smart-filters script was using tsx to run the buildShader.ts script, but in some versions of node, it was unable to resolve dependencies on other packages.\r\n\r\nFor example:\r\nSyntaxError: The requested module 'core/Materials/effectRenderer.js' does not provide an export named 'EffectWrapper'\r\n\r\nWith this change, that script now uses the public buildShader.js instead, eliminating the dependency resolution issue.  The only downside is that working on the Smart Filter code will require building the public package first - and the same with unit tests.  This is about a 20 second additional cost, and doesn't affect the other dev inner loops.",
+                "author": {
+                    "name": "AmoebaChant",
+                    "url": "https://github.com/AmoebaChant"
+                },
+                "files": [
+                    "package.json"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17356",
+                "title": "Web GPU Fix",
+                "description": "in FloatingOriginMode, we override effect.setMatrix to apply an offset. This in turn calls pipelineContext.setMatrix, which in webGPUPipelineContext will call ubo.updateMatrix\r\n\r\npreviously, this would apply offset again and cause incorrect positioning. The fix is to avoid double offset by existing early if the passed in matrix is === the most recently offset Temp matrix. To avoid cases where TempFinalMat happens to be equal values, I also move the updateFlag set to after the early out check.\r\n\r\n",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17354",
+                "title": "Standard material: Fix wrong normal when in right handed mode",
+                "description": "See https://forum.babylonjs.com/t/default-lighting-normals-inverted-for-standard-material-in-right-handed-system/61168",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Shaders/default.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/default.fragment.fx"
+                ],
+                "tags": [
+                    "bug",
+                    "materials"
+                ]
+            },
+            {
+                "pr": "17353",
+                "title": "ISpriteManager: add doNotSerialize",
+                "description": "This commit adds an optional doNotSerialize to ISpriteManager, makes it possible to control if a sprite manager should be serialized. The `doNotSerialize` is also added to `SpriteManager`.\r\nSee <https://forum.babylonjs.com/t/ispritemanager-add-donotserialize/61133>",
+                "author": {
+                    "name": "kzhsw",
+                    "url": "https://github.com/kzhsw"
+                },
+                "files": [
+                    "packages/dev/core/src/Misc/sceneSerializer.ts",
+                    "packages/dev/core/src/Sprites/spriteManager.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17352",
+                "title": "glTFLoaderAnimation: do not clone animation keys",
+                "description": "This commit skips animation keys cloning by setting `dontClone=true` when calling `Animation.setKeys`. This should reduce peak heap allocation and GC pressure when loading animation-heavy models.\r\nIn GLTF loader, keys are created in callback in `_loadAnimationChannelFromTargetInfoAsync`, and passed to `propertyInfo.buildAnimations`, and never escaped from the scope, so it should be safe to do this change.\r\n\r\nSee also the forum post <https://forum.babylonjs.com/t/gltf-loader-do-not-clone-animation-keys/60903>",
+                "author": {
+                    "name": "kzhsw",
+                    "url": "https://github.com/kzhsw"
+                },
+                "files": [
+                    "packages/dev/loaders/src/glTF/2.0/glTFLoaderAnimation.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFAnimation.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17339",
+                "title": "Merging textures on export",
+                "description": "For OpenPBR, all textures that can be combined in glTF can also be assigned separately. Therefore, we need a way to easily merge textures on export.\r\n\r\nI've written a texture-merging utility and started implmenting it for the anisotropy extensions as well as baseColor-alpha and metal-rough texture output.\r\n\r\nI'd like feedback about this approach before I continue further. Please and thank you.",
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/Textures/index.ts",
+                    "packages/dev/core/src/Materials/Textures/textureMerger.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrBaseLayerData.fx",
+                    "packages/dev/core/src/Shaders/textureMerger.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrBaseLayerData.fx",
+                    "packages/dev/core/src/ShadersWGSL/textureMerger.fragment.fx",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_anisotropy.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_anisotropy.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFMaterialExporter.ts"
+                ],
+                "tags": []
+            }
+        ],
+        "8.33.3": [
+            {
+                "pr": "17346",
+                "title": "Fix WebGPU voxel vertex shader syntax",
+                "description": "Just a quick fix for the voxel shader in WebGPU.",
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/core/src/ShadersWGSL/iblVoxelGrid.vertex.fx"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17347",
+                "title": "Fixes for editor v2",
+                "description": "1. CSS fix for function parameters overflow\r\n2. Change order of execution for the runner when we have external dependencies that are referenced in code from global namespace. The only external dep that relies on the existence of an Engine is Sound, so everything else can come first and then patch the engine for Sound if that's a dependency afterwards",
+                "author": {
+                    "name": "knervous",
+                    "url": "https://github.com/knervous"
+                },
+                "files": [
+                    "packages/tools/playground/src/scss/editor.scss",
+                    "packages/tools/playground/src/tools/monaco/run/runner.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17345",
+                "title": "Open infobutton links in new tab",
+                "description": "Bug fix to open link in new tab vs current window\r\n\r\nother changes:\r\n- Moves fluent link usage over to the shared primitive \r\n- Adds style prop to baseprimtive ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/sharedUiComponents/src/fluent/hoc/propertyLines/linkPropertyLine.tsx",
+                    "packages/dev/sharedUiComponents/src/fluent/hoc/propertyLines/propertyLine.tsx",
+                    "packages/dev/sharedUiComponents/src/fluent/primitives/colorPicker.tsx",
+                    "packages/dev/sharedUiComponents/src/fluent/primitives/link.tsx",
+                    "packages/dev/sharedUiComponents/src/fluent/primitives/messageBar.tsx",
+                    "packages/dev/sharedUiComponents/src/fluent/primitives/primitive.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "inspector",
+                    "tools"
+                ]
+            },
+            {
+                "pr": "17344",
+                "title": "Enable per-scene FloatingOrigin in utility layer renderer",
+                "description": "This fixes bug where UtilityLayer scene was only respecting engine's useLargeWorldRendering, not the original scene's useFloatingOrigin setting\r\n\r\nSee forum post here: https://forum.babylonjs.com/t/physicsviewer-issue-when-using-floating-origin-on-a-single-scene/61119/2",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Rendering/utilityLayerRenderer.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17341",
+                "title": "Inspector v2: Side pane collapsing and undocking",
+                "description": "With this PR the whole \"side panes\" (all tabs, top and bottom, plus toolbars) can be:\r\n1. Collapsed/expanded (small expand buttons will overlay the canvas in the top corners)\r\n2. \"Undocked\" to child windows\r\n\r\nStyling in the child windows is easy to manage. No need to copy styles or anything like Inspector v1, it just requires a little bit of Fluent setup in the child window, and then only the used styles will be injected into that window.\r\n\r\nIn the Inspector v2 implementation, when a child window is closed, it is just re-docked in the main window. Also, child windows will automatically close if Inspector itself is closed, or if the main window is closed.\r\n\r\nUnfortunately, the approach I initially used with portals to keep the panes mounted all the time (so we don't lose their state when redocking) *does not* work with child windows. Simply re-parenting a raw html element into a child window basically bypasses all the fluent theming and also seems to break other things. For this reason, I rolled that part of the change back, which means when you redock a side pane, it is unmounted/remounted and the state is lost. However, I did two things to improve this:\r\n1. Panes are not unmounted/remounted when the selected tab changes.\r\n2. Scene explorer selects the currently selected entity when it first mounts, so if you re-dock to a new location (including a child window), it at least selects and scrolls to the same selected entity. This is still an improvement over the v1 behavior!\r\n\r\n<img width=\"1146\" height=\"753\" alt=\"image\" src=\"https://github.com/user-attachments/assets/8fff2e9f-aa38-44ed-ae63-71b01ae017c1\" />\r\n<img width=\"1149\" height=\"751\" alt=\"image\" src=\"https://github.com/user-attachments/assets/36e81e0c-26ed-4bad-a9ee-26762e295473\" />\r\n<img width=\"436\" height=\"306\" alt=\"image\" src=\"https://github.com/user-attachments/assets/b4ca7528-d805-4d2c-9bd0-eeb95286858d\" />\r\n<img width=\"1146\" height=\"754\" alt=\"image\" src=\"https://github.com/user-attachments/assets/79c533ee-67ca-4b9d-87b5-2fb30381d69c\" />",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/components/gizmoToolbar.tsx",
+                    "packages/dev/inspector-v2/src/components/scene/sceneExplorer.tsx",
+                    "packages/dev/inspector-v2/src/services/shellService.tsx",
+                    "packages/dev/inspector-v2/src/services/themeSelectorService.tsx"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17343",
+                "title": "Node Render Graph: Add support for custom blocks in NRGE",
+                "description": null,
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/FrameGraph/Node/Types/nodeRenderGraphTypes.ts",
+                    "packages/dev/core/src/FrameGraph/Node/nodeRenderGraph.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/nodeRenderGraphEditor/src/globalState.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/graphEditor.tsx",
+                    "packages/tools/nodeRenderGraphEditor/src/nodeRenderGraphEditor.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "nrge",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17270",
+                "title": "Single-pass IBL shadow voxelization for WebGPU",
+                "description": "This changes the voxelization strategy for WebGPU to allow it to be done in a single pass (though, generation of mips still takes additional steps). This is possible using `textureStore` to write to arbitrary texels in a 3D texture. It also uses vertex pulling to correctly determine the provoking vertex for each triangle and retrieve adjacent vertices so that we can calculate the triangle's normal. This is used to swizzle the xyz components to maximize the rasterized area and not miss voxels.\r\n\r\nAnywho, this makes updating shadows for animated meshes much more plausible. I'm not sure the best way to do this but currently, in my playground, I'm doing this:\r\n```\r\nconst frameSkip = 1;\r\nlet frame = 0;\r\nscene.onAfterAnimationsObservable.add(() => {\r\n    if (enableIblShadows) {\r\n        if (frame == 0 && scene.animatables.find((anim) => !anim.paused)) {\r\n            iblShadowsPipeline.updateVoxelization();\r\n            iblShadowsPipeline.resetAccumulation();\r\n        }\r\n        if (frame === frameSkip) {\r\n            frame = 0;\r\n        } else {\r\n            frame++;\r\n        }\r\n    }\r\n});\r\n```\r\nIs there a better way to query whether there is currently an animation happening?",
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/core/src/Rendering/IBLShadows/iblShadowsVoxelRenderer.ts",
+                    "packages/dev/core/src/ShadersWGSL/iblVoxelGrid.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/iblVoxelGrid.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/iblVoxelGrid3dDebug.fragment.fx"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17342",
+                "title": "IParticleSystem: add doNotSerialize",
+                "description": "This commit adds an optional doNotSerialize to IParticleSystem, makes it possible to control if a particle system should be serialized.\r\nThe `doNotSerialize` is also added to `ParticleSystem` and `GPUParticleSystem`, but not added to `SubEmitter`, `SubEmitter.particleSystem.doNotSerialize` is checked instead.",
+                "author": {
+                    "name": "kzhsw",
+                    "url": "https://github.com/kzhsw"
+                },
+                "files": [
+                    "packages/dev/core/src/Misc/sceneSerializer.ts",
+                    "packages/dev/core/src/Particles/IParticleSystem.ts",
+                    "packages/dev/core/src/Particles/gpuParticleSystem.ts",
+                    "packages/dev/core/src/Particles/particleSystem.ts",
+                    "packages/dev/core/src/Particles/particleSystemSet.ts"
+                ],
+                "tags": []
+            }
+        ],
         "8.33.2": [
             {
                 "pr": "17340",
