@@ -1,34 +1,330 @@
 {
-    "fromTag": "8.33.4",
+    "fromTag": "8.34.0",
     "changelog": {
-        "8.33.4": [
+        "8.34.1": [
             {
-                "pr": "17348",
-                "title": "Add shadow generator / cascaded shadow generator support",
-                "description": "ShadowGenerator uses scene's view/projection matrix to set uniform values, however the offset logic assumes viewmatrix is centered at 0, so we must apply true viewmatrix offset when within shadowgenerator (i.e. when eye is not at origin).\r\n\r\nWe also offst lightMatrix+i manually because we cannot rely on the scene's viewmatrix/projectionmatrix at this point. \r\n\r\nTest with https://playground.babylonjs.com/?snapshot=refs/pull/17348/merge#IFYDRS#869 and \r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17348/merge#KY0N7T#78 \r\n",
+                "pr": "17386",
+                "title": "Update link in contributing.md",
+                "description": null,
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "contributing.md"
+                ],
+                "tags": [
+                    "skip changelog"
+                ]
+            },
+            {
+                "pr": "17373",
+                "title": "Add KHR_materials_fuzz extension support",
+                "description": null,
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/PBR/openpbrMaterial.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrFuzzLayerData.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/pbrBRDFFunctions.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrFuzzLayerData.fx",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/KHR_materials_fuzz.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/index.ts",
+                    "packages/dev/loaders/src/glTF/2.0/materialLoadingAdapter.ts",
+                    "packages/dev/loaders/src/glTF/2.0/openpbrMaterialLoadingAdapter.ts",
+                    "packages/dev/loaders/src/glTF/2.0/pbrMaterialLoadingAdapter.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_fuzz.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/index.ts",
+                    "packages/public/glTF2Interface/babylon.glTF2Interface.d.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17383",
+                "title": "SSAO2: Fix rendering artifacts when switching camera mode",
+                "description": "See https://forum.babylonjs.com/t/ssao2-does-not-behave-correctly-with-dynamically-changing-camera-parameters/61245",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/ssao2Task.ts",
+                    "packages/dev/core/src/PostProcesses/RenderPipeline/Pipelines/ssao2RenderingPipeline.ts",
+                    "packages/dev/core/src/PostProcesses/thinSSAO2PostProcess.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "post-process"
+                ]
+            },
+            {
+                "pr": "17379",
+                "title": "Inspector v2: umd cdn",
+                "description": "This is a follow up to my initial umd package PR: https://github.com/BabylonJS/Babylon.js/pull/17357\r\n\r\nIn the initial PR, the path I went was to redirect `inspector` to `inspector-v2` in the context of the Inspector v2 build, since they ultimately are the same package with different versions (v2 having the `-prefix` suffix). This was simpler, but it turns out doesn't work with the way we publish umd bundles to our cdn. For that, we need unique entries in the package mappings, so now I've added a separate entry for inspector-v2. This gets used by the prepareSnapshot script to determine what gets copied to the cdn. The way I set it up is the inspector v2 bundle gets copied to the inspector directory, but with a new unique name (babylon.inspector-v2.bundle.js). I tested the snapshot copy locally, but in the process I noticed that we were copying webpack.config.js files to the cdn (because they match the *.js glob). For example: https://cdn.babylonjs.com/webpack.config.js. @docEdub - we should probably try to figure out how to remove all these webpack.config.js files from the cdn.\r\n\r\nFor now I'm making this PR draft so that I can verify the snapshot cdn functionality before merging, and also I don't want to touch any cdn publishing related stuff on a Friday afternoon. :)",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/buildTools/src/packageMapping.ts",
+                    "packages/dev/buildTools/src/prepareSnapshot.ts",
+                    "packages/public/umd/babylonjs-inspector-v2/src/index.ts",
+                    "packages/public/umd/babylonjs-inspector-v2/tsconfig.build.json",
+                    "packages/public/umd/babylonjs-inspector-v2/tsconfig.json",
+                    "packages/public/umd/babylonjs-inspector-v2/webpack.config.js"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17384",
+                "title": "Normalize particle direction in shader for billboardmode_stretchedlocal",
+                "description": "See this playground using stretched_local https://playground.babylonjs.com/?inspectorv2=true#0K3AQ2#3677 where the direction is not pre-normalized and causes unexpected super stretched particles \r\n\r\nThis prevents against assuming pre-normalized direction ",
                 "author": {
                     "name": "georginahalpern",
                     "url": "https://github.com/georginahalpern"
                 },
                 "files": [
-                    "packages/dev/core/src/Lights/Shadows/cascadedShadowGenerator.ts",
-                    "packages/dev/core/src/Lights/Shadows/shadowGenerator.ts",
-                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts"
+                    "packages/dev/core/src/Shaders/particles.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/particles.vertex.fx"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17382",
+                "title": "Throw error on invalid sound source",
+                "description": "Giving a streaming sound an invalid sounds source causes sound creation to fail silently. See https://playground.babylonjs.com/#C584K5 for an example.\r\n\r\nThis change makes streaming sound creation throw an error when given an invalid sound source.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioStreamingSound.ts"
+                ],
+                "tags": [
+                    "audio"
+                ]
+            },
+            {
+                "pr": "17378",
+                "title": "Atmosphere addon fixes for floating origin",
+                "description": "- Ensure atmosphere parameters get computed correctly when floating origin is enabled, assuming planet center is 0,0,0 in world space.\r\n- Use common dot product helper\r\n- **NOTE:** Minor breaking change to API; Include `Camera` as parameter to some existing observables that were previously `Observable<void>`.",
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/addons/src/atmosphere/atmosphere.ts",
+                    "packages/dev/addons/src/atmosphere/atmospherePBRMaterialPlugin.ts",
+                    "packages/dev/addons/src/atmosphere/atmospherePerCameraVariables.ts",
+                    "packages/dev/addons/src/atmosphere/diffuseSkyIrradianceLut.ts",
+                    "packages/dev/addons/src/atmosphere/transmittanceLut.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17380",
+                "title": "Adding cone shape and other fixes",
+                "description": "More support for converting to NPE:\r\n- Adding support for cone shape emitter, which is required to support ParticleHelper.CreateDefault. \r\n- Adding size/scale on the CreateParticleBlock\r\n- Adding updateSpeed on system block.\r\n- Wiring other properties for the system block.\r\n\r\nPG to test: #7J0NXA#5\r\nPG capture\r\n<img width=\"1863\" height=\"561\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d1a9d7ab-8119-4dfd-a454-14b1622aa95e\" />\r\n\r\nNPE capture\r\n<img width=\"807\" height=\"898\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9900155a-b48b-4002-899a-1e4f9057facd\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/boxShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/coneShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/index.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/tools/nodeParticleEditor/src/blockTools.ts",
+                    "packages/tools/nodeParticleEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/registerToDisplayLedger.ts"
                 ],
                 "tags": [
                     "new feature"
                 ]
             },
             {
-                "pr": "17350",
-                "title": "Smart Filters: fix over-aggressive optimizer validation error when local variable contains a uniform name",
-                "description": "If a local variable in a helper function contained a string matching the decorated version of a uniform name, it would incorrectly think that the helper function was using the uniform and return an error.  For example, if the uniform was \"foo\" the decorated name would be \"_foo_\".  If the function had a parameter called \"foo_bar\" it would become \"_foo_bar_\" and then would incorrectly be confused for the uniform \"_foo_\" and the error would be displayed.  This fixes test to ensure there are non-word character surrounding the match.",
+                "pr": "17360",
+                "title": "Support KHR_materials_coat extension",
+                "description": "Adding support to import and export `KHR_materials_coat`, the new coating extension for glTF that supports additional features like coat color, coat darkening and coat anisotropy.\r\n\r\nI also removed the previous sub-extensions that I had added recently (e.g. KHR_materials_clearcoat_darkening, etc.) as they are no longer needed.\r\n\r\nI also used the texture merger to combine the coat weight and coat roughness textures, if needed.",
+                "author": {
+                    "name": "MiiBond",
+                    "url": "https://github.com/MiiBond"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/PBR/openpbrMaterial.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrCoatLayerData.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrDirectLighting.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/openpbrEnvironmentLighting.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrCoatLayerData.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrDirectLighting.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/openpbrEnvironmentLighting.fx",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/KHR_materials_clearcoat.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/KHR_materials_coat.ts",
+                    "packages/dev/loaders/src/glTF/2.0/Extensions/index.ts",
+                    "packages/dev/loaders/src/glTF/2.0/openpbrMaterialLoadingAdapter.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_anisotropy.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_anisotropy.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_color.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_darkening.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_ior.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_coat.ts",
+                    "packages/dev/serializers/src/glTF/2.0/Extensions/index.ts",
+                    "packages/public/glTF2Interface/babylon.glTF2Interface.d.ts",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-Thickness-VS-IOR---Analytic-Lights.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-Thickness-VS-IOR---IBL.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-Weight-VS-IOR---Analytic-Lights.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-and-Specular-Weight---Analytic-Lights.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-and-Specular-Weight---IBL.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-and-Specular-Weight-Metals---Analytic-Lights.png",
+                    "packages/tools/tests/test/visualization/ReferenceImages/OpenPBR-Thin-Film-and-Specular-Weight-Metals---IBL.png"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17357",
+                "title": "Inspector v2: umd package",
+                "description": "This is the initial implementation of the Inspector v2 umd package. We need this for a few reasons:\r\n1. There was one ask on the forum already for being able to use Inspector directly in a web page without bundling the code. The only solution we have for this right now is umd as we don't have bundled esm packages, and using packages with thousands of loose files directly in a page via esm is impractical due to the huge import map configuration that would be needed.\r\n2. Right now the versioning strategy used in Playground and Sandbox are based on umd bundles.\r\n3. We need umd for back compat.\r\n\r\nThe inspector v2 js bundle has a -v2 in the name, so it will not conflict with Inspector v2 when deployed to the Babylon CDN.\r\n\r\nAfter this change goes in, I will have to update the pipeline to have the extra steps for publishing Inspector v2 as babylonjs-inspector@preview (basically the same as what has already been done with @babylonjs/inspector@preview).",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "package-lock.json",
+                    "package.json",
+                    "packages/dev/inspector-v2/package.json",
+                    "packages/dev/inspector-v2/src/legacy/legacy.ts",
+                    "packages/public/@babylonjs/inspector-v2/package.json",
+                    "packages/public/@babylonjs/inspector-v2/readme.md",
+                    "packages/public/umd/babylonjs-inspector-v2/license.md",
+                    "packages/public/umd/babylonjs-inspector-v2/package.json",
+                    "packages/public/umd/babylonjs-inspector-v2/prepublish.cjs",
+                    "packages/public/umd/babylonjs-inspector-v2/readme.md",
+                    "packages/public/umd/babylonjs-inspector-v2/src/index.ts",
+                    "packages/public/umd/babylonjs-inspector-v2/test.html",
+                    "packages/public/umd/babylonjs-inspector-v2/tsconfig.build.json",
+                    "packages/public/umd/babylonjs-inspector-v2/tsconfig.json",
+                    "packages/public/umd/babylonjs-inspector-v2/webpack.config.js"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17377",
+                "title": "GUI 2D: Fix shadowOffsetX and shadowOffsetY to respect adaptive scaling",
+                "description": null,
                 "author": {
                     "name": "AmoebaChant",
                     "url": "https://github.com/AmoebaChant"
                 },
                 "files": [
-                    "packages/dev/smartFilters/src/optimization/smartFilterOptimizer.ts"
+                    "packages/dev/gui/src/2D/controls/checkbox.ts",
+                    "packages/dev/gui/src/2D/controls/colorpicker.ts",
+                    "packages/dev/gui/src/2D/controls/container.ts",
+                    "packages/dev/gui/src/2D/controls/control.ts",
+                    "packages/dev/gui/src/2D/controls/ellipse.ts",
+                    "packages/dev/gui/src/2D/controls/image.ts",
+                    "packages/dev/gui/src/2D/controls/inputText.ts",
+                    "packages/dev/gui/src/2D/controls/inputTextArea.ts",
+                    "packages/dev/gui/src/2D/controls/line.ts",
+                    "packages/dev/gui/src/2D/controls/multiLine.ts",
+                    "packages/dev/gui/src/2D/controls/radioButton.ts",
+                    "packages/dev/gui/src/2D/controls/rectangle.ts",
+                    "packages/dev/gui/src/2D/controls/sliders/slider.ts",
+                    "packages/dev/gui/src/2D/controls/textBlock.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17375",
+                "title": "Replacing basic update blocks on Particles to NPE converter",
+                "description": "With this change, when converting from particles to NPE, several nodes change:\r\n- Dead Color is now an input block.\r\n- BasicPositionUpdate is represented with all its nodes instead of the simplification\r\n- BasicColorUpdate is also represented with all its nodes instead of the simplification\r\n\r\nPG to test: #0K3AQ2#3670\r\n\r\nBefore:\r\n<img width=\"1225\" height=\"727\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7a35868c-b870-4415-998c-5179094ee301\" />\r\n\r\nAfter:\r\n<img width=\"1073\" height=\"878\" alt=\"image\" src=\"https://github.com/user-attachments/assets/08fbd3cf-5aaa-4803-a0dd-9ad8491e02a2\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/particleInputBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Enums/nodeParticleContextualSources.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/tools/nodeParticleEditor/src/blockTools.ts",
+                    "packages/tools/nodeParticleEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/display/inputDisplayManager.ts"
+                ],
+                "tags": [
+                    "enhancement"
+                ]
+            },
+            {
+                "pr": "17374",
+                "title": "PBRMetallicRoughnessMaterial: Fix wrong lighting when two sided lighting enabled",
+                "description": "See https://forum.babylonjs.com/t/wrong-normals-used-for-double-sided-pbr-material-in-right-handed-system/61226",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Meshes/mesh.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "materials"
+                ]
+            },
+            {
+                "pr": "17362",
+                "title": "Background material: Fix material not working with floating origin mode + fix use of the sceneCenter property",
+                "description": "It also fixes a bug in the original implementation of the background material because `vBackgroundCenter` was only set when `REFLECTIONFRESNEL` was defined, whereas if you look at the shader code, you will see that this uniform is only used when both `REFLECTIONFRESNEL `and `REFLECTIONFALLOFF `are defined, or when `OPACITYFRESNEL` is defined.",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/Background/backgroundMaterial.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "materials"
+                ]
+            },
+            {
+                "pr": "17372",
+                "title": "Playground fixes for debug.html, frame.html and full.html",
+                "description": "When the new playground was implemented, the secondary html files (debug.html, frame.html and full.html) broke due to the compilation hash being inserted into the `babylon.playground.{hash}.js` filename. These secondary html files were still pointing to the non-hash `babylon.playground.js` file, which is no longer being built, but may still be cached.\r\n\r\nThis change updates the secondary html files to use the correct `babylon.playground.{hash}.js` filename.\r\n\r\nThis change also fixes a scss deprecation warning for the color `lighten` function by replacing it with `color.adjust`.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/tools/playground/debug.html",
+                    "packages/tools/playground/frame.html",
+                    "packages/tools/playground/full.html",
+                    "packages/tools/playground/src/scss/editor.scss",
+                    "packages/tools/playground/webpack.config.js"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17369",
+                "title": "PostProcess: add doNotSerialize",
+                "description": "This commit adds a doNotSerialize to PostProcess with a default false, since it’s a class, existing code should not be broken, and derived classes should inherit this prop.\r\nIn SceneSerializer._Serialize, doNotSerialize would be checked like all other type of objects for PostProcess.\r\nForum link: <https://forum.babylonjs.com/t/postprocess-add-donotserialize/61186>\r\n",
+                "author": {
+                    "name": "kzhsw",
+                    "url": "https://github.com/kzhsw"
+                },
+                "files": [
+                    "packages/dev/core/src/Misc/sceneSerializer.ts",
+                    "packages/dev/core/src/PostProcesses/postProcess.ts",
+                    "packages/tools/tests/test/visualization/config.json"
                 ],
                 "tags": []
             }
@@ -299,6 +595,38 @@
                     "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_anisotropy.ts",
                     "packages/dev/serializers/src/glTF/2.0/Extensions/KHR_materials_clearcoat_anisotropy.ts",
                     "packages/dev/serializers/src/glTF/2.0/glTFMaterialExporter.ts"
+                ],
+                "tags": []
+            }
+        ],
+        "8.33.4": [
+            {
+                "pr": "17348",
+                "title": "Add shadow generator / cascaded shadow generator support",
+                "description": "ShadowGenerator uses scene's view/projection matrix to set uniform values, however the offset logic assumes viewmatrix is centered at 0, so we must apply true viewmatrix offset when within shadowgenerator (i.e. when eye is not at origin).\r\n\r\nWe also offst lightMatrix+i manually because we cannot rely on the scene's viewmatrix/projectionmatrix at this point. \r\n\r\nTest with https://playground.babylonjs.com/?snapshot=refs/pull/17348/merge#IFYDRS#869 and \r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17348/merge#KY0N7T#78 \r\n",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Lights/Shadows/cascadedShadowGenerator.ts",
+                    "packages/dev/core/src/Lights/Shadows/shadowGenerator.ts",
+                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17350",
+                "title": "Smart Filters: fix over-aggressive optimizer validation error when local variable contains a uniform name",
+                "description": "If a local variable in a helper function contained a string matching the decorated version of a uniform name, it would incorrectly think that the helper function was using the uniform and return an error.  For example, if the uniform was \"foo\" the decorated name would be \"_foo_\".  If the function had a parameter called \"foo_bar\" it would become \"_foo_bar_\" and then would incorrectly be confused for the uniform \"_foo_\" and the error would be displayed.  This fixes test to ensure there are non-word character surrounding the match.",
+                "author": {
+                    "name": "AmoebaChant",
+                    "url": "https://github.com/AmoebaChant"
+                },
+                "files": [
+                    "packages/dev/smartFilters/src/optimization/smartFilterOptimizer.ts"
                 ],
                 "tags": []
             }
