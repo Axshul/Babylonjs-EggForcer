@@ -1,6 +1,578 @@
 {
-    "fromTag": "8.34.0",
+    "fromTag": "8.36.0",
     "changelog": {
+        "8.36.0": [],
+        "8.36.1": [
+            {
+                "pr": "17416",
+                "title": "Adding Gravity to the NPE migration tool",
+                "description": "Adds the gravity part of the particle update.\r\n\r\nPG to test: #0K3AQ2#3693\r\n<img width=\"941\" height=\"688\" alt=\"image\" src=\"https://github.com/user-attachments/assets/494653c7-abba-42f9-a16e-2232c2006285\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17415",
+                "title": "Add WebXR light estimation intensity factor",
+                "description": "The WebXR light estimation directional light's intensity is set directly from the intensity returned by the device's XR implementation, which is too light or dark for some applications.\r\n\r\nThis change adds a `directionalLightIntensityFactor` setting to the `WebXRLightEstimation` feature to adjust the directional light's as needed.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/XR/features/WebXRLightEstimation.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17411",
+                "title": "NativeEngine: Support Blob in createImageBitmap",
+                "description": "This PR adds handling for a Blob object in createImageBitmap.\r\n\r\nWe should probably outright remove the Blob hack from here, but just to quickly & safely unblock [these other changes](https://github.com/BabylonJS/BabylonNative/pull/1565), I hope this is alright.",
+                "author": {
+                    "name": "alexchuber",
+                    "url": "https://github.com/alexchuber"
+                },
+                "files": [
+                    "packages/dev/core/src/Engines/Native/nativeInterfaces.ts",
+                    "packages/dev/core/src/Engines/nativeEngine.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17414",
+                "title": "Fix bug when action conditions are not met but cursor is changed",
+                "description": null,
+                "author": {
+                    "name": "deltakosh",
+                    "url": "https://github.com/deltakosh"
+                },
+                "files": [
+                    "packages/dev/core/src/Actions/action.ts",
+                    "packages/dev/core/src/Actions/actionManager.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17405",
+                "title": "Adjust documentation comment of `AssetContainer.addAllAssetsToContainer`",
+                "description": "As far as I can tell, this does not actually add animation groups to the asset container.",
+                "author": {
+                    "name": "kv-bh",
+                    "url": "https://github.com/kv-bh"
+                },
+                "files": [
+                    "packages/dev/core/src/assetContainer.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17413",
+                "title": "Improve perf of eyePosition binding by removing check for mirroredCameraPosition",
+                "description": "Rather than having eyePosition binding check both mirroredCameraPosition and forcedViewPosition (happens for every scene on every frame) we can instead just check forcedViewPosition (so long as the places where we set mirroredCameraPosition are also setting forcedViewPosition).\r\n\r\nNote that mirroredCameraPosition (set by MirrorTexture and WaterMaterial) is used for setting various uniforms including eyePosition, while forcedViewPosition is only used for setting the eyePosition. \r\n\r\nEyePosition binding happens far more often than mirroring textures so its more important that this is optimized.",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/Textures/mirrorTexture.ts",
+                    "packages/dev/core/src/scene.ts",
+                    "packages/dev/materials/src/water/waterMaterial.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17412",
+                "title": "Animation: Fix wrong value at end of animation",
+                "description": "See https://forum.babylonjs.com/t/animations-with-animationloopmode-constant-behave-weird/61320\r\n\r\nIt looks like a bug to me, what do you think?",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Animations/runtimeAnimation.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "animations"
+                ]
+            },
+            {
+                "pr": "17410",
+                "title": "Fixing initial particle size",
+                "description": null,
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/createParticleBlock.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17409",
+                "title": "Dispose sound instances when they stop playing",
+                "description": null,
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/abstractAudio/abstractSound.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioStaticSound.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "audio"
+                ]
+            },
+            {
+                "pr": "17407",
+                "title": "Remove redundant _isDirty sets",
+                "description": "Vector **classes** already set _isDirty to true when setting individual properties like `x`, `y`, and `z`, so the _isDirty handling from the previous change is not actually needed. Keeping the tests but removing the _isDirty-related validation.",
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/core/src/Maths/math.like.ts",
+                    "packages/dev/core/src/Maths/math.vector.functions.ts",
+                    "packages/dev/core/test/unit/Math/babylon.math.vector.functions.test.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17408",
+                "title": "FrameGraph: misc improvements",
+                "description": "In this PR:\r\n* Fix default values for some node render graph properties\r\n* Add missing properties to node render graph post processes\r\n* Add **viewport** property to post-process and copyToTexture tasks\r\n* Add onBefore and onAfter task execution observables",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Decorators/nodeDecorator.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/anaglyphPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/basePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/baseWithPropertiesPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/blackAndWhitePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/blurPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/chromaticAberrationPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/circleOfConfusionPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/colorCorrectionPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/convolutionPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/extractHighlightsPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/filterPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/fxaaPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/grainPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/imageProcessingPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/motionBlurPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/passPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/screenSpaceCurvaturePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/sharpenPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/taaPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/tonemapPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Textures/copyTextureBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/postProcessTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/taaTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/objectRendererTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Texture/copyToTextureTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphContext.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphRenderContext.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphTask.ts",
+                    "packages/dev/core/src/Misc/copyTextureToTexture.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/graphSystem/properties/genericNodePropertyComponent.tsx"
+                ],
+                "tags": [
+                    "new feature",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17406",
+                "title": "Add support for Sprites",
+                "description": "Offset sprites position in vertex buffer data (as sprites.vertex shader doesn't use world matrix)\r\n\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17406/merge#P3E9YP#287 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Sprites/spriteRenderer.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17396",
+                "title": "Support multi-object raycasting for havok",
+                "description": "We use multi-object raycasting to see if a trigger is in view, but it can be useful in other ways too (for example, guns that shoot through multiple enemies).\r\n\r\nLet me know if this API is a good fit for Babylon.js. Another approach could be to create a new `raycastMulti` function in `HavokPlugin`, and reimplement `raycast` as a thin wrapper over it.\r\n\r\nOne possible concern is if a developer sets `maxQueryCollectorHits` to a high number, it will affect *all* raycasts, not just multi-casts. We could perhaps create a separate `queryCollector` for multi-cast use only?",
+                "author": {
+                    "name": "lwp-joel",
+                    "url": "https://github.com/lwp-joel"
+                },
+                "files": [
+                    "packages/dev/core/src/Physics/v2/IPhysicsEnginePlugin.ts",
+                    "packages/dev/core/src/Physics/v2/Plugins/havokPlugin.ts",
+                    "packages/dev/core/src/Physics/v2/physicsEngine.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17404",
+                "title": "GPUPicker: Fix picking ID precision issues",
+                "description": "Resolves the issue:\r\nhttps://forum.babylonjs.com/t/missing-doc-for-gpupicker-in-v8-31-3/61295/5\r\n\r\nWhat I found while examining this issue is that\r\n\r\nwhen outputting values received as uniform variables in the shader to the screen,\r\nthe uniform values were displayed completely without error,\r\n\r\nbut values received as attributes exhibited errors.\r\n\r\nI don't know the exact reason for this, as it is an internal WebGL implementation detail.\r\nThrough experimentation, I found a safe `MaxPickingId` value usable across WebGL, WebGL2, and WebGPU.\r\nI confirmed that adding 0.5 at the point of casting from int resolves this precision issue.",
+                "author": {
+                    "name": "noname0310",
+                    "url": "https://github.com/noname0310"
+                },
+                "files": [
+                    "packages/dev/core/src/Collisions/gpuPicker.ts",
+                    "packages/dev/core/src/Shaders/picking.fragment.fx",
+                    "packages/dev/core/src/Shaders/picking.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/picking.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/picking.vertex.fx"
+                ],
+                "tags": []
+            }
+        ],
+        "8.35.0": [
+            {
+                "pr": "17402",
+                "title": "Support reflection probe / reuse eyePosition logic",
+                "description": "Reuse logic for floatingorigin and eyepos, supporting use of _forcedViewPosition (used by reflectionprobe)\r\n\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17402/merge#KA93U#1715\r\n\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17402/merge#P3E9YP#286\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17402/merge#Y6W087\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17402/merge#P3E9YP#283",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/scene.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17403",
+                "title": "_isDirty support for *ToRef vector functions",
+                "description": null,
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/core/src/Maths/math.like.ts",
+                    "packages/dev/core/src/Maths/math.vector.functions.ts",
+                    "packages/dev/core/test/unit/Math/babylon.math.vector.functions.test.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17398",
+                "title": "Support clip planes, skymaterial, and water material",
+                "description": "Support sky/water materials in floatingoriginmode and fix clip planes, both for materials with clipplanes enabled/disabled as well as standard clipplane support \r\n\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17398/merge#P3E9YP#286\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17398/merge#Y6W087\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17398/merge#P3E9YP#283\r\n\r\nThis approach builds off of https://github.com/BabylonJS/Babylon.js/pull/17370/files but avoids any changes to the scene-level values such as clipplanes to align with floatingorigin philosophy of it being undetectable from publicly available methods",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/clipPlaneMaterialHelper.ts",
+                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts",
+                    "packages/dev/core/src/Materials/index.ts",
+                    "packages/dev/materials/src/sky/skyMaterial.ts",
+                    "packages/dev/materials/src/water/waterMaterial.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17400",
+                "title": "Add helpers for vector3 length and distance",
+                "description": null,
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/core/src/Maths/math.vector.functions.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17401",
+                "title": "Update stackpanel to respect idealratio",
+                "description": "Fix bug reported in this forum post \r\n\r\nhttps://forum.babylonjs.com/t/stackpanel-spacing-doesnt-scale-properly-with-advanceddynamictexture-that-has-an-ideal-size/61304/2 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/gui/src/2D/controls/stackPanel.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "gui"
+                ]
+            },
+            {
+                "pr": "17399",
+                "title": "Inspector: Add glTF export option for Draco",
+                "description": "From https://forum.babylonjs.com/t/implement-draco-compressed-glb-export-option-in-sandbox-inspector/52129. Because why not?! :)",
+                "author": {
+                    "name": "alexchuber",
+                    "url": "https://github.com/alexchuber"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/components/tools/exportTools.tsx",
+                    "packages/dev/inspector/src/components/actionTabs/tabs/toolsTabComponent.tsx"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17393",
+                "title": "Supporting more NPE transformations",
+                "description": "Changes:\r\n- Fixed issue with isLocal and isEmitterTransformNode in emitters.\r\n- Added more properties to SystemBlock.\r\n- Added more properties to CreateParticleBlock.\r\n- Added support for color gradients when migrating to NPE.",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/boxShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/createParticleBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/customShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/cylinderShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/meshShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/pointShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/sphereShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17394",
+                "title": "Use the scaled Light intensity for the Atmosphere",
+                "description": "In physically based scenes, one may specify DirectionalLight parameters for angular radius and an intensity in luminance or illuminance, depending on the intensityMode. To properly leverage this for the atmosphere, we need to read the scaled intensity instead.",
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/addons/src/atmosphere/atmosphere.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17397",
+                "title": "Improve performance of audio engine V2 add/remove sound",
+                "description": null,
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/abstractAudio/audioEngineV2.ts"
+                ],
+                "tags": [
+                    "audio",
+                    "skip changelog"
+                ]
+            },
+            {
+                "pr": "17395",
+                "title": "math.vector.functions cleanup and additions",
+                "description": "* Remove unnecessary usages of generic types on some params\r\n* Add and use a new `Vector4Dot` in place of static `Quaternion.Dot`\r\n* Add `Vector3ScaleInPlace`\r\n* Use `IQuaternionLike`, `IVector3Like`, and `IVector4Like` interfaces for params instead of `Quaternion`, `Vector3`, and `Vector4`",
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/core/src/Maths/math.vector.functions.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17365",
+                "title": "DumpData: Refactor for glTF export in BN",
+                "description": "This PR adds the glue code to enable DumpData usage in BN with the glTF exporter.\r\n\r\nChanges:\r\n- Factor out core image encoding to a separate function matching NativeEncoding's own exposed function name. This follows the current nativeOverride pattern for module-level functions (see the MathHelper class.)\r\n- Remove the `bitmaprenderer` path. I initially planned for Native to polyfill this, but that turned out to be not a good idea.\r\n- Fix case in glTF exporter where exporting images to a specific format could lead to invalid images if the browser or platform didn't support it.",
+                "author": {
+                    "name": "alexchuber",
+                    "url": "https://github.com/alexchuber"
+                },
+                "files": [
+                    "packages/dev/core/src/Misc/decorators.ts",
+                    "packages/dev/core/src/Misc/dumpTools.ts",
+                    "packages/dev/core/src/Misc/index.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFExporter.ts",
+                    "packages/dev/serializers/src/glTF/2.0/glTFMaterialExporter.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17389",
+                "title": "Inspector v2: Improved extension details",
+                "description": "This is addressing an Inspector v2 forum ask: https://forum.babylonjs.com/t/introducing-inspector-v2/60937/85\r\n\r\nIt adds more details to extension metadata and displays it in the extensions dialog. It also makes it more clear at a glance whether an extension is currently installed. There is also some general style improvements, like using the Fluent Card component which is made for this type of use case.\r\n\r\n<img width=\"607\" height=\"513\" alt=\"image\" src=\"https://github.com/user-attachments/assets/4f955cee-20d9-4045-865e-ded14b64f3df\" />\r\n<img width=\"600\" height=\"499\" alt=\"image\" src=\"https://github.com/user-attachments/assets/e6e3c261-6c78-4814-a33a-7e19092f7f65\" />\r\n<img width=\"445\" height=\"315\" alt=\"image\" src=\"https://github.com/user-attachments/assets/dfdaaf77-e381-41a6-8d63-c7eb05d8c69d\" />\r\n<img width=\"404\" height=\"313\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ccec0448-660d-4ec9-bfbd-54c0fdacb7ba\" />\r\n",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/extensibility/defaultInspectorExtensionFeed.ts",
+                    "packages/dev/inspector-v2/src/extensibility/extensionFeed.ts",
+                    "packages/dev/inspector-v2/src/modularTool.tsx",
+                    "packages/dev/inspector-v2/src/services/extensionsListService.tsx"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17381",
+                "title": "FrameGraph: add new task + several fixes",
+                "description": "In this PR:\r\n* Added a new `FrameGraphComputeShaderTask` (+ `NodeRenderGraphComputeShaderBlock`) class to simplify the management of compute shaders in frame graphs\r\n* Added a new `customIsReady` property in `FrameGraphExecuteTask`\r\n* Fixed directional and point shadows not working with frame graphs in some cases\r\n* Fixed `Mesh.ignoreCameraZ` not working with frame graphs\r\n  * Regarding this one, making `Mesh.ignoreCameraMaxZ` work in `ObjectRenderer` may be difficult (it wasn't supported when the feature has been implemented a few years ago) and bad for performance, because it means the view/projection matrix changes during rendering, forcing us to update the scene ubo, which is bad in WebGPU.\r\n  * Instead, I added a **ignoreCameraMaxZ** property in the `Camera` class. I feel it's the right place to put it, and there's no performance penalty to put it there. The catch is that all meshes rendered by the camera will ignore **maxZ** when the property is set. That shouldn't be a problem, though. What do you think? cc @sebavan, @deltakosh\r\n* Fixed crashes in NRGE in some cases\r\n\r\n~~Don't review it yet, it may not be complete!~~ Ready for review!",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/camera.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/bloomPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/chromaticAberrationPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/computeShaderBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/executeBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/index.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/inputBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/outputBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/nodeRenderGraph.ts",
+                    "packages/dev/core/src/FrameGraph/Node/nodeRenderGraphBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Passes/pass.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Misc/computeShaderTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Misc/executeTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/bloomTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraph.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphTextureManager.ts",
+                    "packages/dev/core/src/FrameGraph/index.ts",
+                    "packages/dev/core/src/Lights/directionalLight.ts",
+                    "packages/dev/core/src/Lights/pointLight.ts",
+                    "packages/dev/core/src/scene.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/blockTools.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/nodeRenderGraphEditor/src/components/preview/previewManager.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/globalState.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/graphEditor.tsx",
+                    "packages/tools/nodeRenderGraphEditor/src/graphSystem/properties/inputNodePropertyComponent.tsx",
+                    "packages/tools/nodeRenderGraphEditor/src/nodeRenderGraphEditor.ts",
+                    "packages/tools/playground/public/templates.json"
+                ],
+                "tags": [
+                    "bug",
+                    "new feature",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17391",
+                "title": "Add `sounds` list to new audio engine",
+                "description": null,
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/abstractAudio/audioEngineV2.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioEngine.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioStaticSound.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioStreamingSound.ts",
+                    "packages/tools/tests/test/audioV2/audioEngineV2.sounds.test.ts"
+                ],
+                "tags": [
+                    "audio"
+                ]
+            },
+            {
+                "pr": "17392",
+                "title": "Deprecate old audio engine scene properties and functions",
+                "description": null,
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/Audio/audioSceneComponent.ts",
+                    "packages/dev/core/src/scene.ts"
+                ],
+                "tags": [
+                    "audio",
+                    "skip changelog"
+                ]
+            },
+            {
+                "pr": "17390",
+                "title": "Add ignoreBody filter for IRaycastQuery",
+                "description": "Forum post: https://forum.babylonjs.com/t/ignorebody-query-flag-for-iraycastquery/61276\r\n\r\nThis is mainly copied from the `shapeCast` function.\r\n\r\nFor future reference, are forum posts needed for feature requests with PRs like this, or only for issues?",
+                "author": {
+                    "name": "lwp-joel",
+                    "url": "https://github.com/lwp-joel"
+                },
+                "files": [
+                    "packages/dev/core/src/Physics/physicsRaycastResult.ts",
+                    "packages/dev/core/src/Physics/v2/Plugins/havokPlugin.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17388",
+                "title": "SSAO2 camera fovMode support + Initialization with Ortho Camera Fix",
+                "description": "This PR complements #17383\r\n\r\n### SSAO camera fovMode support \r\n\r\nThis is the second topic I posted on the forum. \r\nhttps://forum.babylonjs.com/t/ssao2-does-not-behave-correctly-with-dynamically-changing-camera-parameters/61245\r\n\r\n### Initialization with Ortho Camera Fix\r\nFirst, the code in #17383 does not function correctly during the initial camera mode initialization.\r\n```typescript\r\nthis._originalColorPostProcess.onBeforeRenderObservable.add(() => {\r\n    const camera = this._scene.activeCamera;\r\n    if (camera && this._currentCameraMode !== camera.mode) {\r\n        this._currentCameraMode = camera.mode;\r\n        this._thinSSAORenderingPipeline._ssaoPostProcess.updateEffect();\r\n    }\r\n});\r\n```\r\nBecause at the initial point when this callback executes, `this._thinSSAORenderingPipeline._ssaoPostProcess` is null.\r\n\r\nTherefore, the camera's initial projection `mode` is ignored, and since the ORTHOGRAPHIC_CAMERA define is never set, it only functions correctly for perspective cameras.\r\n\r\nTo resolve this, initialize `this._thinSSAORenderingPipeline._ssaoPostProcess.camera` with `activeCamera` once at line 331 in `ssao2RenderingPipeline.ts`.\r\n\r\n",
+                "author": {
+                    "name": "noname0310",
+                    "url": "https://github.com/noname0310"
+                },
+                "files": [
+                    "packages/dev/core/src/PostProcesses/RenderPipeline/Pipelines/ssao2RenderingPipeline.ts",
+                    "packages/dev/core/src/PostProcesses/thinSSAO2PostProcess.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "post-process"
+                ]
+            },
+            {
+                "pr": "17387",
+                "title": "React overlay off by default",
+                "description": null,
+                "author": {
+                    "name": "deltakosh",
+                    "url": "https://github.com/deltakosh"
+                },
+                "files": [
+                    "packages/dev/buildTools/src/webpackTools.ts"
+                ],
+                "tags": [
+                    "skip changelog"
+                ]
+            }
+        ],
         "8.34.1": [
             {
                 "pr": "17386",
