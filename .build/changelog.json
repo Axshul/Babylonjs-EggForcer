@@ -1,7 +1,6 @@
 {
-    "fromTag": "8.36.0",
+    "fromTag": "8.36.1",
     "changelog": {
-        "8.36.0": [],
         "8.36.1": [
             {
                 "pr": "17416",
@@ -250,6 +249,471 @@
                 "tags": []
             }
         ],
+        "8.37.0": [
+            {
+                "pr": "17439",
+                "title": "Adding CustomShape support",
+                "description": "- Fixes bug on customParticleEmitter where directionGenerator would be always used even if not defined.\r\n- Updates CustomShapeBlock to use the generator functions to create the particles initial position/direction.\r\n\r\nPG to test: #9PJW1J#18\r\n<img width=\"1172\" height=\"925\" alt=\"image\" src=\"https://github.com/user-attachments/assets/1544399a-ba72-4a18-ba18-12c887feed9a\" />\r\n<img width=\"973\" height=\"390\" alt=\"CustomResult\" src=\"https://github.com/user-attachments/assets/aaa50d30-a019-4f5f-ade9-33f5bb57e5f4\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/EmitterTypes/customParticleEmitter.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/customShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17444",
+                "title": "Adding cone emitter support",
+                "description": "- Simplified initial direction calculation for ConeEmitter and ConeShape.\r\n- Added support for isLocal in ConeShape\r\n- Made emitFromSpawnPointOnly an editable boolean instead of an int block\r\n\r\nPG to test: #UL4WC0#108\r\n<img width=\"1408\" height=\"1296\" alt=\"image\" src=\"https://github.com/user-attachments/assets/fabd5748-848d-461b-bdad-aa35f92af4a5\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/EmitterTypes/coneParticleEmitter.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/coneShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "enhancement",
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17443",
+                "title": "Fix ray length check",
+                "description": null,
+                "author": {
+                    "name": "deltakosh",
+                    "url": "https://github.com/deltakosh"
+                },
+                "files": [
+                    "packages/dev/core/src/Culling/ray.core.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17441",
+                "title": "Add support for node material blocks",
+                "description": "NodeMaterials have slightly different uniform names, using u_BlockNameX\r\n\r\n<img width=\"394\" height=\"187\" alt=\"image\" src=\"https://github.com/user-attachments/assets/cf254e65-e78e-4c63-b5a1-dfc7ef18d2cf\" />\r\n\r\nNote in future if we optimize node material blocks to use same uniform name if same block is used, we can replace includes with === u_Foo\r\n\r\nTested with /#D8AK3Z#130 and /#D8AK3Z#129\r\nSee forum post https://forum.babylonjs.com/t/large-world-rendering-has-issues-with-nme-specular-lighting/61375/3",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/floatingOriginMatrixOverrides.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17440",
+                "title": "Update _globalPosition from base camera when calculating view/world matrices",
+                "description": "This ensures that camera extension doesn't need to explicitly set the global position. ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/camera.ts",
+                    "packages/dev/core/src/Cameras/targetCamera.ts",
+                    "packages/dev/core/src/scene.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17437",
+                "title": "Add support for hemispheric emission in sphere shape",
+                "description": "Adds support to emit in a hemisphere instead of a full sphere.\r\n\r\nPG to test: #FHIQYC#9\r\n<img width=\"512\" height=\"371\" alt=\"HemisphericSupport\" src=\"https://github.com/user-attachments/assets/c97598f8-5348-4f18-ae6f-307afffbbf46\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/sphereShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17438",
+                "title": "Fixing issues with MeshShape",
+                "description": "- Adds support for isLocal on MeshShapeBlock\r\n- Fixes minor bugs setting the context for MeshShapeBlock\r\n\r\nPG to test: #WYPOX1#3",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/meshShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17436",
+                "title": "Add directed cylinder shape",
+                "description": "Adds support for direction1 and 2 for cylinder shape. DirectionRandomizer takes precedence unless both direction1 and 2 are connected.\r\n\r\nPG to test: #UL4WC0#101",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/cylinderShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17435",
+                "title": "Add directedsphere emitter",
+                "description": "- Fixes SphereDirectedEmitter not handling isLocal correctly.\r\n- Adds support for direction1 and 2 for SphereShapeBlock. DirectionRandomizer will take precedence unless both directions are connected.\r\n\r\nPG to test: #MRRGXL#947\r\n<img width=\"436\" height=\"391\" alt=\"DirectedParticle\" src=\"https://github.com/user-attachments/assets/1430ca6b-3f1a-41dc-b165-6f52ca7a7de4\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/EmitterTypes/sphereParticleEmitter.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/sphereShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.function.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17434",
+                "title": "Updating cylinder shape",
+                "description": "Updating CylinderShape to support isLocal.\r\n\r\nPG to test: #UL4WC0#99",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/cylinderShapeBlock.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17433",
+                "title": "Inspector v2: back compat second pass",
+                "description": "This PR is mostly about adding support for the Inspector v1 `additionalNodes` option as well as handling properties for objects with `inspectableCustomProperties`.\r\n\r\n1. `additionalNodes` - this just adds a Scene Explorer extension (service definition) to add the static set of nodes specified by this option.\r\n2. `inspectableCustomProperties` - this always needs to be present, even if we are not invoking Inspector v2 through the new APIs. Otherwise, objects that have this property will not show up in Inspector v2, which we don't want. Because of this, I moved ./backCompat.tsx to ./legacy/inspector.tsx (contains the legacy `Inspector` static class), moved ./debugLayer.ts to ./legacy/debugLayer.ts, and added `inspectableCustomPropertiesService.ts` to the legacy folder as well. This way, all \"legacy\" support is organized in the legacy folder. inspectableCustomPropertiesService.ts exports a service definition that is always included in Inspector v2 though.\r\n\r\nHere is an example that combines both `additionalNodes` and custom inspectable objects:\r\n```ts\r\nInspector.Show(scene, {\r\n    additionalNodes: [\r\n        {\r\n            name: \"test\",\r\n            getContent: () => [\r\n                {\r\n                    name: \"item\",\r\n                    getClassName: () => \"item class name\",\r\n                    _checkboxProp1: true,\r\n                    get checkboxProp1() {\r\n                        return (this as any)._checkboxProp1;\r\n                    },\r\n                    set checkboxProp1(value: boolean) {\r\n                        console.log(\"set checkboxProp1:\", value);\r\n                        (this as any)._checkboxProp1 = value;\r\n                    },\r\n                    sliderProp1: 42,\r\n                    vector3Prop1: new Vector3(1, 2, 3),\r\n                    quaternionProp1: new Quaternion(1, 2, 3, 4),\r\n                    colorProp1: new Color3(0.1, 0.2, 0.3),\r\n                    stringProp1: \"hello world\",\r\n                    optionsProp1: 2,\r\n                    tabProp1: \"Tab1\",\r\n                    vector2Prop1: new Vector2(4, 5),\r\n                    inspectableCustomProperties: [\r\n                        {\r\n                            propertyName: \"checkboxProp1\",\r\n                            label: \"checkboxProp1 label\",\r\n                            type: InspectableType.Checkbox,\r\n                        },\r\n                        {\r\n                            propertyName: \"sliderProp1\",\r\n                            label: \"sliderProp1 label\",\r\n                            type: InspectableType.Slider,\r\n                            min: 10,\r\n                            max: 100,\r\n                            step: 0.1,\r\n                        },\r\n                        {\r\n                            propertyName: \"vector3Prop1\",\r\n                            label: \"vector3Prop1 label\",\r\n                            type: InspectableType.Vector3,\r\n                        },\r\n                        {\r\n                            propertyName: \"quaternionProp1\",\r\n                            label: \"quaternionProp1 label\",\r\n                            type: InspectableType.Quaternion,\r\n                        },\r\n                        {\r\n                            propertyName: \"colorProp1\",\r\n                            label: \"colorProp1 label\",\r\n                            type: InspectableType.Color3,\r\n                        },\r\n                        {\r\n                            propertyName: \"stringProp1\",\r\n                            label: \"stringProp1 label\",\r\n                            type: InspectableType.String,\r\n                        },\r\n                        {\r\n                            propertyName: \"buttonProp1\",\r\n                            label: \"buttonProp1 label\",\r\n                            type: InspectableType.Button,\r\n                            callback: () => console.log(\"buttonProp1 clicked\"),\r\n                        },\r\n                        {\r\n                            propertyName: \"optionsProp1\",\r\n                            label: \"optionsProp1 label\",\r\n                            type: InspectableType.Options,\r\n                            options: [\r\n                                { label: \"Option 1\", value: 1 },\r\n                                { label: \"Option 2\", value: 2 },\r\n                                { label: \"Option 3\", value: 3 },\r\n                            ],\r\n                        },\r\n                        {\r\n                            propertyName: \"tabProp1\",\r\n                            label: \"tabProp1 label\",\r\n                            type: InspectableType.Tab,\r\n                        },\r\n                        {\r\n                            propertyName: \"fileProp1\",\r\n                            label: \"fileProp1 label\",\r\n                            type: InspectableType.FileButton,\r\n                            accept: \".txt,.json\",\r\n                            fileCallback: (file: File) => {\r\n                                console.log(file.name);\r\n                            },\r\n                        },\r\n                        {\r\n                            propertyName: \"vector2Prop1\",\r\n                            label: \"vector2Prop1 label\",\r\n                            type: InspectableType.Vector2,\r\n                        },\r\n                    ],\r\n                } as const,\r\n            ],\r\n        },\r\n    ],\r\n});\r\n```\r\n\r\n<img width=\"360\" height=\"409\" alt=\"image\" src=\"https://github.com/user-attachments/assets/8296bb33-ca7a-4ebf-ac2d-281641c9794c\" />\r\n<img width=\"354\" height=\"656\" alt=\"image\" src=\"https://github.com/user-attachments/assets/97ced7bf-2e40-4921-a5ed-3afd4670e470\" />\r\n",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/index.ts",
+                    "packages/dev/inspector-v2/src/inspector.tsx",
+                    "packages/dev/inspector-v2/src/legacy/debugLayer.ts",
+                    "packages/dev/inspector-v2/src/legacy/inspectableCustomPropertiesService.tsx",
+                    "packages/dev/inspector-v2/src/legacy/inspector.tsx",
+                    "packages/dev/sharedUiComponents/src/fluent/hoc/propertyLines/dropdownPropertyLine.tsx",
+                    "packages/tools/playground/src/components/rendererComponent.tsx",
+                    "packages/tools/sandbox/src/globalState.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17431",
+                "title": "Particles point emitter",
+                "description": "Updating particles point emitter to handle isLocal correctly.\r\n\r\nPG to test: #WLX2I2#4",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/pointShapeBlock.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17432",
+                "title": "Fixing sphere emitter",
+                "description": "Fixes a direction bug with sphere emitter and adds support for isLocal.\r\n\r\nPG to test: #MRRGXL#944",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/boxShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/sphereShapeBlock.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17429",
+                "title": "Adding particles islocal support for NPE",
+                "description": "Adds support for isLocal for NPE, which involves:\r\n- Creating the localPosition when creating the particle. Right now only BoxShapeBlock does this (other shape emitters will be fixed in follow up PRs as I work through to support all the emitter shapes).\r\n- Creating a new contextProperty for the updated local position.\r\n- Making sure isLocal is part of the node build state.\r\n\r\nPG to test: #LNRAI3#146\r\n\r\nWhen not using isLocal, this is how updating the position works:\r\n<img width=\"1044\" height=\"619\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7bca8e03-0cc8-4089-8654-f076ca81e608\" />\r\n\r\nThis is how it looks when isLocal:\r\n<img width=\"1024\" height=\"703\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ac2ccc6a-41f6-43c8-abb9-2c21b5db3d6a\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/boxShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/emitters.functions.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/particleInputBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Enums/nodeParticleContextualSources.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/tools/nodeParticleEditor/src/blockTools.ts",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/display/inputDisplayManager.ts",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/properties/inputNodePropertyComponent.tsx"
+                ],
+                "tags": [
+                    "bug",
+                    "enhancement",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17424",
+                "title": "Remove audio volume ramp overlap limitation",
+                "description": "When audio volume ramping was implemented, Firefox was not able to cancel active ramps when setting new ramps. In order to make volume ramping consistent on all browsers, we throw an error when ramps overlap.\r\n\r\nThis limitation has now been removed from Firefox, so this change removes the limitation and allows overlapping audio volume ramps, canceling any existing ramps when setting new ones.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/abstractAudio/audioEngineV2.ts",
+                    "packages/dev/core/src/AudioV2/abstractAudio/subNodes/volumeAudioSubNode.ts",
+                    "packages/dev/core/src/AudioV2/audioParameter.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/components/webAudioParameterComponent.ts",
+                    "packages/tools/tests/test/audioV2/shared/abstractAudioNode.volume.ts"
+                ],
+                "tags": [
+                    "audio"
+                ]
+            },
+            {
+                "pr": "17430",
+                "title": "PrePass Renderer: fix wrong camera being used for the prepass setup",
+                "description": null,
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Rendering/prePassRenderer.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "rendering engine"
+                ]
+            },
+            {
+                "pr": "17421",
+                "title": "Inspector v2: debugLayer and back compat first pass",
+                "description": "This PR adds a simple `Scene.debugLayer` implementation, adds support for additional Inspector v1 features and APIs, adds a little new functionality to the core Inspector v2 layers to support some back compat features, and clearly separates back compat functionality from new functionality/API.\r\n\r\n- Add a `layoutMode` to `ShellService` that allows inline or overlay (side panes overlay the central content).\r\n- Allow the `sidePaneRemapper` option for `ShellService` to return `null`, meaning don't show the pane at all (used for Inspector v1 options that shows only Scene Explorer or only the rest of the right side panes).\r\n- Removed the `Inspector` class and all Inspector v1 related functionality from the Inspector v2 `ShowInspector` function, and moved it to a separate backCompat file. Now the static Inspector class is where all back compat lives, and the new expanded Inspector v2 API is all through the new `ShowInspector` function.\r\n- Added support for various Inspector v1 options.\r\n\r\nThere is more left to do, but I want to do it in chunks so the PRs don't get too big.\r\n\r\nAlso as the comment says, support for `debugLayer` is commented out for now, as it would otherwise break the ability to dynamically switch between Inspector v1 and v2 in Playground and Sandbox. It will be enabled when we are ready to make v2 the default and are ok with a page reload to switch between v1 and v2.",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/core/src/Debug/debugLayer.ts",
+                    "packages/dev/inspector-v2/src/backCompat.ts",
+                    "packages/dev/inspector-v2/src/debugLayer.ts",
+                    "packages/dev/inspector-v2/src/index.ts",
+                    "packages/dev/inspector-v2/src/inspector.tsx",
+                    "packages/dev/inspector-v2/src/legacy/legacy.ts",
+                    "packages/dev/inspector-v2/src/services/shellService.tsx",
+                    "packages/dev/inspector-v2/test/app/index.tsx",
+                    "packages/tools/playground/src/components/rendererComponent.tsx",
+                    "packages/tools/sandbox/src/globalState.ts"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17427",
+                "title": "Allow overriding new asset URLs in core",
+                "description": "This PR re-routes some asset URLs that were recently added to core. Each of these should pass through GetAssetUrl in order to be configurable. See #16089.",
+                "author": {
+                    "name": "alexchuber",
+                    "url": "https://github.com/alexchuber"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/PBR/openpbrMaterial.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.ts",
+                    "packages/dev/core/src/Rendering/IBLShadows/iblShadowsRenderPipeline.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17426",
+                "title": "Fixes bug with simple colors",
+                "description": "There was a bug with simple colors that I introduced when adding support for gradients that simple colors would not connect to the create particle block. This fixes it.",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17425",
+                "title": "Fixing handling of undefined values",
+                "description": "NGE random block handling of undefined values was using || instead of ??.",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Meshes/Node/Blocks/randomBlock.ts"
+                ],
+                "tags": [
+                    "enhancement"
+                ]
+            },
+            {
+                "pr": "17423",
+                "title": "Fix WebXR pick bug",
+                "description": "After exiting a WebXR session, mesh picks fail because the scene continues using the XR camera for picking, even though the active camera is set back to the scene's flatscreen camera.\r\n\r\nThis change fixes the issue by resetting the scene's picking camera when the WebXR session ends.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/XR/webXRSessionManager.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17422",
+                "title": "FrameGraph: Minor changes",
+                "description": null,
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/basePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/baseWithPropertiesPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/index.ts"
+                ],
+                "tags": [
+                    "skip changelog"
+                ]
+            },
+            {
+                "pr": "17419",
+                "title": "Add support for particles textureMask",
+                "description": "Add support for textureMask on the NPE migration tool.\r\nFixes bug with ParticleRandomBlock dealing with zero values.\r\n\r\nPG: #0K3AQ2#3709\r\n<img width=\"794\" height=\"544\" alt=\"image\" src=\"https://github.com/user-attachments/assets/83f63512-41c2-4c42-b64c-141e2dc05c7d\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/particleRandomBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17420",
+                "title": "FrameGraph: fix mipmap generation + crash with the utility layer renderer",
+                "description": "In this PR:\r\n* Fix crashes with the utility layer renderer task\r\n* Fix mipmap generation in WebGL\r\n* Allow to copy a specific mipmap level with the copy texture to texture task\r\n* Fix texture samplers not using mipmaps\r\n* Minor updates\r\n",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Engines/WebGPU/webgpuCacheSampler.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Rendering/csmShadowGeneratorBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Rendering/shadowGeneratorBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Textures/copyTextureBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/csmShadowGeneratorTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/shadowGeneratorTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/utilityLayerRendererTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Texture/copyToTextureTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphRenderContext.ts",
+                    "packages/dev/core/src/Misc/copyTextureToTexture.ts",
+                    "packages/dev/core/src/Shaders/copyTextureToTexture.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/copyTextureToTexture.fragment.fx"
+                ],
+                "tags": [
+                    "bug",
+                    "enhancement",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17418",
+                "title": "Adding particles translation support",
+                "description": "Adds support for particles translation when migrating to NPE.\r\n\r\nPG: #0K3AQ2#3716\r\n<img width=\"358\" height=\"385\" alt=\"image\" src=\"https://github.com/user-attachments/assets/89c75bb2-77c9-4329-8792-7612c6e31218\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17417",
+                "title": "Adding angular speed update",
+                "description": "Adds migration of angular speed for NPE migration helper.\r\n\r\nPG: #0K3AQ2#3713\r\n<img width=\"1329\" height=\"562\" alt=\"image\" src=\"https://github.com/user-attachments/assets/6bd5391f-6455-45b8-b59e-96197459602a\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/createParticleBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            }
+        ],
+        "8.36.0": [],
         "8.35.0": [
             {
                 "pr": "17402",
