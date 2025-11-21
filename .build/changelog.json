@@ -1,11 +1,161 @@
 {
-    "fromTag": "8.36.1",
+    "fromTag": "8.37.3",
     "changelog": {
-        "8.36.1": [
+        "8.38.0": [
             {
-                "pr": "17416",
-                "title": "Adding Gravity to the NPE migration tool",
-                "description": "Adds the gravity part of the particle update.\r\n\r\nPG to test: #0K3AQ2#3693\r\n<img width=\"941\" height=\"688\" alt=\"image\" src=\"https://github.com/user-attachments/assets/494653c7-abba-42f9-a16e-2232c2006285\" />\r\n",
+                "pr": "17482",
+                "title": "GeospatialCamera clamping near poles",
+                "description": "- Reduce speed of panning as we near poles to avoid a super fast spinning around poles effect\r\n- Avoid panning directly over poles to prevent flipping the earth effect \r\n\r\nBoth are standard interactions when navigating globe\r\n\r\n#17451 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/geospatialCamera.ts",
+                    "packages/dev/core/src/Cameras/geospatialCameraMovement.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "camera"
+                ]
+            },
+            {
+                "pr": "17481",
+                "title": "GeospatialCamera flyToPoint will calculate new center",
+                "description": "DoubleTap to zoom was assuming the pickedPoint was the new center which is not correct. This change exposes a new flyToPoint function which internally calculates the new center (using same logic as zoomToCursor) and flies towards new point by the given radius scale%\r\n\r\n#17451 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraPointersInput.ts",
+                    "packages/dev/core/src/Cameras/geospatialCamera.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "camera"
+                ]
+            },
+            {
+                "pr": "17480",
+                "title": "Fix accumulated animations in interpolatingBehavior",
+                "description": "If we don't clear the interpolation-related animations from amera.animations array then any time we try to animate a new property, it will reset any existing runtimeAnimations to their original state, causing a visual flicker (ex: if we animate center and then radius, we will see center return to its original value before the radius animation begins)\r\n\r\nThis change removes the associated animation from camera.animations when the onAnimationEnd callback is called.\r\n\r\nAlso must expose 'stopCurrent' param to the transitionTo function to ensure we don't stop in-progress property transitions (which would in turn remove it from animations array)\r\n\r\n#17451 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Animations/animation.ts",
+                    "packages/dev/core/src/Behaviors/Cameras/interpolatingBehavior.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "camera"
+                ]
+            },
+            {
+                "pr": "17477",
+                "title": "Particles emit gradient",
+                "description": "- Adds a block to transform Float to Int (Round, Ceil, Floor, Trunc)\r\n- Add support for migrating emit gradients\r\n- Changes emit from a property to an input that can get a block connected\r\n- Updates thinParticleSystem to use a function to calculate the emitRate, so it can be overwritten by systemBlock in NPE\r\n- Because now emit rate can start at zero and change at runtime after the system being created (with no user input), changed a check that was disabling evaluating the system when no particles were emitted\r\n\r\nPG to test: #1D36S5#3\r\nPG to test: #9AUVWG#1\r\n<img width=\"1190\" height=\"653\" alt=\"image\" src=\"https://github.com/user-attachments/assets/6020d257-02b4-46d4-aad9-3445a8b202a7\" />\r\n\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/index.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/particleFloatToIntBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.ts",
+                    "packages/tools/nodeParticleEditor/src/blockTools.ts",
+                    "packages/tools/nodeParticleEditor/src/components/nodeList/nodeListComponent.tsx"
+                ],
+                "tags": [
+                    "enhancement",
+                    "npe"
+                ]
+            }
+        ],
+        "8.37.3": [
+            {
+                "pr": "17478",
+                "title": "GeospatialCamera keyboardinput set scene/engine",
+                "description": "Bug introduced in a bad merge! ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraKeyboardInput.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "camera"
+                ]
+            }
+        ],
+        "8.37.2": [
+            {
+                "pr": "17476",
+                "title": "Inspector v2: Back compat for contextMenu v1 option",
+                "description": "Prior to this PR, Inspector v2 supports scene explorer commands on entities only (individual meshes, transform nodes, textures, materials, etc.) but not on sections (Nodes, Textures, Materials, etc.). This PR renames `addCommand` to `addEntityCommand` and then adds an `addSectionCommand`. This re-uses all the existing Inspector v2 scene explorer command infrastructure, just with different constraints (for now, section commands are context menu only for simplicity).\r\n\r\nWith this in place, the Inspector v1 `contextMenu` option is simply adding section commands of type \"action\" with no icon.\r\n<img width=\"361\" height=\"324\" alt=\"image\" src=\"https://github.com/user-attachments/assets/c2f68041-534c-44e8-9062-71d5cc9ac8e3\" />\r\n",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/components/scene/sceneExplorer.tsx",
+                    "packages/dev/inspector-v2/src/legacy/inspector.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/scene/animationGroupExplorerService.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/scene/frameGraphExplorerService.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/scene/nodeExplorerService.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/scene/sceneExplorerService.tsx",
+                    "packages/dev/inspector-v2/src/services/panes/scene/spriteManagerExplorerService.tsx"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17475",
+                "title": "Define RotationQuaternion as Nullable",
+                "description": "Fixes declaration of RotationQuaternion to be nullable, other than WebXR camera which seems to rely exclusively on rotationQuaternion.\r\n\r\nSee #17463 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/Inputs/freeCameraDeviceOrientationInput.ts",
+                    "packages/dev/core/src/Cameras/Stereoscopic/stereoscopicScreenUniversalCamera.ts",
+                    "packages/dev/core/src/Cameras/VR/vrExperienceHelper.ts",
+                    "packages/dev/core/src/Cameras/deviceOrientationCamera.ts",
+                    "packages/dev/core/src/Cameras/flyCamera.ts",
+                    "packages/dev/core/src/Cameras/targetCamera.ts",
+                    "packages/dev/core/src/XR/webXRCamera.ts",
+                    "packages/dev/core/src/XR/webXRExperienceHelper.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17474",
+                "title": "FrameGraph: Fix visu test code",
+                "description": null,
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/tools/tests/test/visualization/config.json"
+                ],
+                "tags": [
+                    "skip changelog"
+                ]
+            }
+        ],
+        "8.37.1": [
+            {
+                "pr": "17473",
+                "title": "Particles drag",
+                "description": "Adding support for converting particles drag gradients to NPE.\r\nMoves onStart/onEnd to the end of the systemblock.\r\n\r\nPG to test: #AFRUV9\r\n<img width=\"2261\" height=\"1144\" alt=\"image\" src=\"https://github.com/user-attachments/assets/adc735b8-761a-44f4-83ff-3ad61c845160\" />\r\n",
                 "author": {
                     "name": "VicenteCartas",
                     "url": "https://github.com/VicenteCartas"
@@ -15,236 +165,469 @@
                     "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
                 ],
                 "tags": [
+                    "enhancement",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17469",
+                "title": "Add GeospatialCamera FlyTo animations and use for 'double tap to zoom' interaction",
+                "description": "- Update interpolatingBehavior to be typesafe against the camera properties type and accepted animation types\r\n- Add API to flyToAsync towards a destination yaw/pitch/radius/center. Can optionally supply animation duration or easing function\r\n- Adds API to update in-flight camera destination while using up remaining time in animation\r\n- Uses flyTo API for double tap to zoom ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Behaviors/Cameras/interpolatingBehavior.ts",
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraPointersInput.ts",
+                    "packages/dev/core/src/Cameras/geospatialCamera.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "camera"
+                ]
+            },
+            {
+                "pr": "17470",
+                "title": "Inspector v2: Back compat for explorerExtensibility v1 option",
+                "description": "Prior to this PR Inspector v2 supports Scene Explorer \"commands\" which are shown inline in the tree view item, and as such they _must_ have an icon. For the Inspector v1 `explorerExtensibility` option, it is effectively a Scene Explorer command, but has no icon. In Inspector v1, there is a `...` icon at the end that has the context menu. In Inspector v2, we already have a right click context menu for other things like expand/collapse. Given this, the strategy for Inspector v2 is:\r\n\r\n- Allow for \"inline\" vs. \"contextMenu\" commands for Scene Explorer. \"inline\" is the default and requires an icon, where as for \"contextMenu\" the icon is optional.\r\n- For commands that are toggle \"type\" and contextMenu \"mode\", if an icon is provided it is used, otherwise a checkmark is used, but we don't double up the iconography and have both a checkmark and an icon.\r\n\r\nWith this in place, `explorerExtensibility` is simply adding commands of type \"action\" and mode \"contextMenu\" with no icon.\r\n\r\n<img width=\"389\" height=\"331\" alt=\"image\" src=\"https://github.com/user-attachments/assets/4d54c40b-8011-4c9e-be98-2de5b7e96106\" />\r\n",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/inspector-v2/src/components/scene/sceneExplorer.tsx",
+                    "packages/dev/inspector-v2/src/legacy/inspector.tsx"
+                ],
+                "tags": [
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17471",
+                "title": "Particles velocity limit",
+                "description": "Adds support to migrate velocity limit gradients.\r\n\r\nPG to test: #0K3AQ2#3738\r\n<img width=\"859\" height=\"692\" alt=\"image\" src=\"https://github.com/user-attachments/assets/4ef2ecdc-93a5-478a-aa99-69244976ce55\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "enhancement",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17472",
+                "title": "Bump glob and lerna",
+                "description": "Bumps [glob](https://github.com/isaacs/node-glob) to 12.0.0 and updates ancestor dependencies [glob](https://github.com/isaacs/node-glob) and [lerna](https://github.com/lerna/lerna/tree/HEAD/packages/lerna). These dependencies need to be updated together.\n\nUpdates `glob` from 10.4.5 to 12.0.0\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/isaacs/node-glob/blob/main/changelog.md\">glob's changelog</a>.</em></p>\n<blockquote>\n<h1>changeglob</h1>\n<h2>12</h2>\n<ul>\n<li>Remove the unsafe <code>--shell</code> option. The <code>--shell</code> option is now\nONLY supported on known shells where the behavior can be\nimplemented safely.</li>\n</ul>\n<h2>11.1</h2>\n<p><a href=\"https://github.com/isaacs/node-glob/security/advisories/GHSA-5j98-mcp5-4vw2\">GHSA-5j98-mcp5-4vw2</a></p>\n<ul>\n<li>Add the <code>--shell</code> option for the command line, with a warning\nthat this is unsafe. (It will be removed in v12.)</li>\n<li>Add the <code>--cmd-arg</code>/<code>-g</code> as a way to <em>safely</em> add positional\narguments to the command provided to the CLI tool.</li>\n<li>Detect commands with space or quote characters on known shells,\nand pass positional arguments to them safely, avoiding\n<code>shell:true</code> execution.</li>\n</ul>\n<h2>11.0</h2>\n<ul>\n<li>Drop support for node before v20</li>\n</ul>\n<h2>10.4</h2>\n<ul>\n<li>Add <code>includeChildMatches: false</code> option</li>\n<li>Export the <code>Ignore</code> class</li>\n</ul>\n<h2>10.3</h2>\n<ul>\n<li>Add <code>--default -p</code> flag to provide a default pattern</li>\n<li>exclude symbolic links to directories when <code>follow</code> and <code>nodir</code>\nare both set</li>\n</ul>\n<h2>10.2</h2>\n<ul>\n<li>Add glob cli</li>\n</ul>\n<h2>10.1</h2>\n<ul>\n<li>Return <code>'.'</code> instead of the empty string <code>''</code> when the current\nworking directory is returned as a match.</li>\n<li>Add <code>posix: true</code> option to return <code>/</code> delimited paths, even on\nWindows.</li>\n</ul>\n<h2>10.0.0</h2>\n<ul>\n<li>No default exports, only named exports</li>\n</ul>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/2b03ccaf9fc397b6054d639cd5fbe97104d36221\"><code>2b03cca</code></a> 12.0.0</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/d56203dc19a4af5c8f8177a3b67e63a14a246458\"><code>d56203d</code></a> prettier config</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/bb521e5d188a8cbbe86d5cef3bf57a49fdee7c59\"><code>bb521e5</code></a> Remove --shell option where unsafe to use</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/2551fb51440d402fa2120457bf460e546ee9964d\"><code>2551fb5</code></a> 11.1.0</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/47473c046b91c67269df7a66eab782a6c2716146\"><code>47473c0</code></a> bin: Do not expose filenames to shell expansion</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/bc33fe1c6a47abd497703d79ad96036e7891ff62\"><code>bc33fe1</code></a> skip tilde test on systems that lack tilde expansion</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/59bf9ca211bda5636c4fe9e32d41530c90a4f30d\"><code>59bf9ca</code></a> fix notes</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/dde4fa66c87e24b37bb5be28ed10c6e12019edac\"><code>dde4fa6</code></a> docs(README): add #anchor and improve <code>note</code>s</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/0559b0ed13c0f8147cd2ac9d48bb49684caaf20e\"><code>0559b0e</code></a> docs: add better links to path-scurry docs</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/c9773c249b4b9ed6b2447222c226f9d20c6ce916\"><code>c9773c2</code></a> fix: correct typos in <code>README.md</code></li>\n<li>Additional commits viewable in <a href=\"https://github.com/isaacs/node-glob/compare/v10.4.5...v12.0.0\">compare view</a></li>\n</ul>\n</details>\n<br />\n\nUpdates `glob` from 11.0.2 to 11.1.0\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/isaacs/node-glob/blob/main/changelog.md\">glob's changelog</a>.</em></p>\n<blockquote>\n<h1>changeglob</h1>\n<h2>12</h2>\n<ul>\n<li>Remove the unsafe <code>--shell</code> option. The <code>--shell</code> option is now\nONLY supported on known shells where the behavior can be\nimplemented safely.</li>\n</ul>\n<h2>11.1</h2>\n<p><a href=\"https://github.com/isaacs/node-glob/security/advisories/GHSA-5j98-mcp5-4vw2\">GHSA-5j98-mcp5-4vw2</a></p>\n<ul>\n<li>Add the <code>--shell</code> option for the command line, with a warning\nthat this is unsafe. (It will be removed in v12.)</li>\n<li>Add the <code>--cmd-arg</code>/<code>-g</code> as a way to <em>safely</em> add positional\narguments to the command provided to the CLI tool.</li>\n<li>Detect commands with space or quote characters on known shells,\nand pass positional arguments to them safely, avoiding\n<code>shell:true</code> execution.</li>\n</ul>\n<h2>11.0</h2>\n<ul>\n<li>Drop support for node before v20</li>\n</ul>\n<h2>10.4</h2>\n<ul>\n<li>Add <code>includeChildMatches: false</code> option</li>\n<li>Export the <code>Ignore</code> class</li>\n</ul>\n<h2>10.3</h2>\n<ul>\n<li>Add <code>--default -p</code> flag to provide a default pattern</li>\n<li>exclude symbolic links to directories when <code>follow</code> and <code>nodir</code>\nare both set</li>\n</ul>\n<h2>10.2</h2>\n<ul>\n<li>Add glob cli</li>\n</ul>\n<h2>10.1</h2>\n<ul>\n<li>Return <code>'.'</code> instead of the empty string <code>''</code> when the current\nworking directory is returned as a match.</li>\n<li>Add <code>posix: true</code> option to return <code>/</code> delimited paths, even on\nWindows.</li>\n</ul>\n<h2>10.0.0</h2>\n<ul>\n<li>No default exports, only named exports</li>\n</ul>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/2b03ccaf9fc397b6054d639cd5fbe97104d36221\"><code>2b03cca</code></a> 12.0.0</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/d56203dc19a4af5c8f8177a3b67e63a14a246458\"><code>d56203d</code></a> prettier config</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/bb521e5d188a8cbbe86d5cef3bf57a49fdee7c59\"><code>bb521e5</code></a> Remove --shell option where unsafe to use</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/2551fb51440d402fa2120457bf460e546ee9964d\"><code>2551fb5</code></a> 11.1.0</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/47473c046b91c67269df7a66eab782a6c2716146\"><code>47473c0</code></a> bin: Do not expose filenames to shell expansion</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/bc33fe1c6a47abd497703d79ad96036e7891ff62\"><code>bc33fe1</code></a> skip tilde test on systems that lack tilde expansion</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/59bf9ca211bda5636c4fe9e32d41530c90a4f30d\"><code>59bf9ca</code></a> fix notes</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/dde4fa66c87e24b37bb5be28ed10c6e12019edac\"><code>dde4fa6</code></a> docs(README): add #anchor and improve <code>note</code>s</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/0559b0ed13c0f8147cd2ac9d48bb49684caaf20e\"><code>0559b0e</code></a> docs: add better links to path-scurry docs</li>\n<li><a href=\"https://github.com/isaacs/node-glob/commit/c9773c249b4b9ed6b2447222c226f9d20c6ce916\"><code>c9773c2</code></a> fix: correct typos in <code>README.md</code></li>\n<li>Additional commits viewable in <a href=\"https://github.com/isaacs/node-glob/compare/v10.4.5...v12.0.0\">compare view</a></li>\n</ul>\n</details>\n<br />\n\nUpdates `lerna` from 8.2.2 to 9.0.1\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/lerna/lerna/releases\">lerna's releases</a>.</em></p>\n<blockquote>\n<h2>v9.0.1</h2>\n<h2><a href=\"https://github.com/lerna/lerna/compare/v9.0.0...v9.0.1\">9.0.1</a> (2025-11-14)</h2>\n<h3>Bug Fixes</h3>\n<ul>\n<li>expand version range to include nx v22.x (<a href=\"https://redirect.github.com/lerna/lerna/issues/4242\">#4242</a>) (<a href=\"https://github.com/lerna/lerna/commit/0cca28612be720d39f55cc278a9a4a93e112d1e1\">0cca286</a>)</li>\n</ul>\n<h2>v9.0.0</h2>\n<h1><a href=\"https://github.com/lerna/lerna/compare/v8.2.4...v9.0.0\">9.0.0</a> (2025-09-23)</h1>\n<h3>Bug Fixes</h3>\n<ul>\n<li><strong>publish:</strong> ensure README file names are populated on package.json (<a href=\"https://redirect.github.com/lerna/lerna/issues/4211\">#4211</a>) (<a href=\"https://github.com/lerna/lerna/commit/362875d7379a40f54fe75024c75946e41fb32d6e\">362875d</a>)</li>\n</ul>\n<h3>Features</h3>\n<ul>\n<li>support OIDC trusted publishing (<a href=\"https://github.com/lerna/lerna/commit/d51e344e016ebc2308a2185ca7e660a0cb47d143\">d51e344</a>)</li>\n</ul>\n<p>OIDC trusted publishing is now supported by Lerna with no specification configuration required.</p>\n<ul>\n<li>A new guide has been added: <a href=\"https://lerna.js.org/docs/recipes/oidc-trusted-publishing\">https://lerna.js.org/docs/recipes/oidc-trusted-publishing</a></li>\n<li>A fully working example repo has been set up here <a href=\"https://github.com/JamesHenry/lerna-v9-oidc-publishing-example\">https://github.com/JamesHenry/lerna-v9-oidc-publishing-example</a></li>\n</ul>\n<h3>BREAKING CHANGES</h3>\n<blockquote>\n<p>After updating we strongly recommend running <code>lerna repair</code> in your project. This will migrate your <code>lerna.json</code> to the latest and greatest and remove any outdated options.</p>\n</blockquote>\n<p>As this is a major release there are a few breaking changes to be aware of, which may or may not affect your lerna repos, depending on how you are using the tool.</p>\n<ul>\n<li><strong>node v18 support is dropped because it is end of life</strong></li>\n</ul>\n<p>When a node version becomes end of life (EOL) it means that it does not receive any updates or maintenance whatsoever, even if critical security vulnerabilities have been uncovered.</p>\n<p>We strongly encourage all folks here to keep up with the maintenance LTS version of Node at an absolute minimum:</p>\n<p><a href=\"https://github.com/nodejs/release#release-schedule\">https://github.com/nodejs/release#release-schedule</a></p>\n<p>The versions of node supported by lerna are now <code>^20.19.0 || ^22.12.0 || &gt;=24.0.0</code>.</p>\n<ul>\n<li><strong>The <code>@​lerna/legacy-package-management</code> package has been formally removed after 2 years of deprecation</strong>.</li>\n</ul>\n<p>If you are still using <code>lerna add</code>, <code>lerna bootstrap</code> or <code>lerna link</code> commands, please migrate to using your package manager's long-supported workspaces feature. The updated guide should help with this <a href=\"https://lerna.js.org/docs/legacy-package-management\">https://lerna.js.org/docs/legacy-package-management</a>**</p>\n<h2>v8.2.4</h2>\n<h2><a href=\"https://github.com/lerna/lerna/compare/v8.2.3...v8.2.4\">8.2.4</a> (2025-07-27)</h2>\n<h3>Bug Fixes</h3>\n<ul>\n<li>remove all remaining lodash usage (<a href=\"https://redirect.github.com/lerna/lerna/issues/4207\">#4207</a>) (<a href=\"https://github.com/lerna/lerna/commit/8211512df9b4ced9be48e62ba0672de261fc2246\">8211512</a>)</li>\n</ul>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/lerna/lerna/blob/main/packages/lerna/CHANGELOG.md\">lerna's changelog</a>.</em></p>\n<blockquote>\n<h2><a href=\"https://github.com/lerna/lerna/compare/v9.0.0...v9.0.1\">9.0.1</a> (2025-11-14)</h2>\n<h3>Bug Fixes</h3>\n<ul>\n<li>expand version range to include nx v22.x (<a href=\"https://redirect.github.com/lerna/lerna/issues/4242\">#4242</a>) (<a href=\"https://github.com/lerna/lerna/commit/0cca28612be720d39f55cc278a9a4a93e112d1e1\">0cca286</a>)</li>\n</ul>\n<h1><a href=\"https://github.com/lerna/lerna/compare/v8.2.4...v9.0.0\">9.0.0</a> (2025-09-23)</h1>\n<h3>Bug Fixes</h3>\n<ul>\n<li><strong>publish:</strong> ensure README file names are populated on package.json (<a href=\"https://redirect.github.com/lerna/lerna/issues/4211\">#4211</a>) (<a href=\"https://github.com/lerna/lerna/commit/362875d7379a40f54fe75024c75946e41fb32d6e\">362875d</a>)</li>\n</ul>\n<h3>Features</h3>\n<ul>\n<li>support OIDC trusted publishing (<a href=\"https://github.com/lerna/lerna/commit/d51e344e016ebc2308a2185ca7e660a0cb47d143\">d51e344</a>)</li>\n</ul>\n<p>OIDC trusted publishing is now supported by Lerna with no specification configuration required.</p>\n<ul>\n<li>A new guide has been added: <a href=\"https://lerna.js.org/docs/recipes/oidc-trusted-publishing\">https://lerna.js.org/docs/recipes/oidc-trusted-publishing</a></li>\n<li>A fully working example repo has been set up here <a href=\"https://github.com/JamesHenry/lerna-v9-oidc-publishing-example\">https://github.com/JamesHenry/lerna-v9-oidc-publishing-example</a></li>\n</ul>\n<h3>BREAKING CHANGES</h3>\n<blockquote>\n<p>After updating we strongly recommend running <code>lerna repair</code> in your project. This will migrate your <code>lerna.json</code> to the latest and greatest and remove any outdated options.</p>\n</blockquote>\n<p>As this is a major release there are a few breaking changes to be aware of, which may or may not affect your lerna repos, depending on how you are using the tool.</p>\n<ul>\n<li><strong>node v18 support is dropped because it is end of life</strong></li>\n</ul>\n<p>When a node version becomes end of life (EOL) it means that it does not receive any updates or maintenance whatsoever, even if critical security vulnerabilities have been uncovered.</p>\n<p>We strongly encourage all folks here to keep up with the maintenance LTS version of Node at an absolute minimum:</p>\n<p><a href=\"https://github.com/nodejs/release#release-schedule\">https://github.com/nodejs/release#release-schedule</a></p>\n<p>The versions of node supported by lerna are now <code>^20.19.0 || ^22.12.0 || &gt;=24.0.0</code>.</p>\n<ul>\n<li><strong>The <code>@​lerna/legacy-package-management</code> package has been formally removed after 2 years of deprecation</strong>.</li>\n</ul>\n<p>If you are still using <code>lerna add</code>, <code>lerna bootstrap</code> or <code>lerna link</code> commands, please migrate to using your package manager's long-supported workspaces feature. The updated guide should help with this <a href=\"https://lerna.js.org/docs/legacy-package-management\">https://lerna.js.org/docs/legacy-package-management</a>**</p>\n<h2><a href=\"https://github.com/lerna/lerna/compare/v8.2.3...v8.2.4\">8.2.4</a> (2025-07-27)</h2>\n<h3>Bug Fixes</h3>\n<ul>\n<li>remove all remaining lodash usage (<a href=\"https://redirect.github.com/lerna/lerna/issues/4207\">#4207</a>) (<a href=\"https://github.com/lerna/lerna/commit/8211512df9b4ced9be48e62ba0672de261fc2246\">8211512</a>)</li>\n</ul>\n<h2><a href=\"https://github.com/lerna/lerna/compare/v8.2.2...v8.2.3\">8.2.3</a> (2025-06-29)</h2>\n<h3>Bug Fixes</h3>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/lerna/lerna/commit/9df335ad26935f678a488dc99b502f9597913251\"><code>9df335a</code></a> chore(misc): publish 9.0.1</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/0cca28612be720d39f55cc278a9a4a93e112d1e1\"><code>0cca286</code></a> fix: expand version range to include nx v22.x (<a href=\"https://github.com/lerna/lerna/tree/HEAD/packages/lerna/issues/4242\">#4242</a>)</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/4c547b7099575a4d0b11bade1327a1a865901ca2\"><code>4c547b7</code></a> chore: publish v9.0.0</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/d51e344e016ebc2308a2185ca7e660a0cb47d143\"><code>d51e344</code></a> feat: support OIDC trusted publishing</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/96095e21595cfc7bd78fab8f55aed76a144715c4\"><code>96095e2</code></a> feat!: drop EOL node 18, modernize dependencies, node now &quot;^20.19.0 || ^22.12...</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/cf0f8e0b6a27359128ddd4a37329b923c2a9ac80\"><code>cf0f8e0</code></a> feat!: remove <code>@​lerna/legacy-package-management</code> after 2 years of deprecation</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/a53a6dd24b3266352fd594eb2214957d05f77dda\"><code>a53a6dd</code></a> refactor: use native object spreading (<a href=\"https://github.com/lerna/lerna/tree/HEAD/packages/lerna/issues/4216\">#4216</a>)</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/d2ced36e1b0a454a6fcff2f4ed81e118b7b70a53\"><code>d2ced36</code></a> chore: update uuid to v11 (<a href=\"https://github.com/lerna/lerna/tree/HEAD/packages/lerna/issues/4213\">#4213</a>)</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/61e4bc27911bcbe8cac46ec4cb3ebaee1aa2f482\"><code>61e4bc2</code></a> chore(misc): publish 8.2.4</li>\n<li><a href=\"https://github.com/lerna/lerna/commit/8211512df9b4ced9be48e62ba0672de261fc2246\"><code>8211512</code></a> fix: remove all remaining lodash usage (<a href=\"https://github.com/lerna/lerna/tree/HEAD/packages/lerna/issues/4207\">#4207</a>)</li>\n<li>Additional commits viewable in <a href=\"https://github.com/lerna/lerna/commits/v9.0.1/packages/lerna\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot merge` will merge this PR after your CI passes on it\n- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it\n- `@dependabot cancel merge` will cancel a previously requested merge and block automerging\n- `@dependabot reopen` will reopen this PR if it is closed\n- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\nYou can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/BabylonJS/Babylon.js/network/alerts).\n\n</details>",
+                "author": {
+                    "name": "dependabot[bot]",
+                    "url": "https://github.com/apps/dependabot"
+                },
+                "files": [
+                    "package-lock.json",
+                    "package.json"
+                ],
+                "tags": [
+                    "dependencies",
+                    "javascript"
+                ]
+            },
+            {
+                "pr": "17461",
+                "title": "Fix 2D GUI jitter on high DPI screens",
+                "description": "On high DPI screens, we can see fractional pixels in the logical (CSS) pixel space. For example, consider a 150x150 pixel screen at 150% scaling - the logical pixel space will be 100x100.  Note that pointer events happen at the granularity of the physical display, but the position is in the logical space, so the mouse moves by 2/3 of a unit at a time.  If we continue truncating fractional values, we lose information which leads to intermittent off-by-one issues and jitter.\r\n\r\nIn this playground, you can see the jitter when dragging from a point on the screen up and left before the fix, with no jitter after the fix: https://playground.babylonjs.com/#9V23FW#3",
+                "author": {
+                    "name": "AmoebaChant",
+                    "url": "https://github.com/AmoebaChant"
+                },
+                "files": [
+                    "packages/dev/gui/src/2D/controls/control.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17468",
+                "title": "Particles velocity gradient",
+                "description": "- Adds support for converting velocity gradients\r\n- Adds block for contextual directionScale\r\n\r\nPG to test: #VEAFKK#1\r\n<img width=\"2579\" height=\"1104\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ae6adbaa-682a-4140-b051-fcd3d6e9d197\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/particleInputBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Enums/nodeParticleContextualSources.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/tools/nodeParticleEditor/src/blockTools.ts",
+                    "packages/tools/nodeParticleEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/display/inputDisplayManager.ts",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/properties/inputNodePropertyComponent.tsx"
+                ],
+                "tags": [
                     "new feature",
                     "npe"
                 ]
             },
             {
-                "pr": "17415",
-                "title": "Add WebXR light estimation intensity factor",
-                "description": "The WebXR light estimation directional light's intensity is set directly from the intensity returned by the device's XR implementation, which is too light or dark for some applications.\r\n\r\nThis change adds a `directionalLightIntensityFactor` setting to the `WebXRLightEstimation` feature to adjust the directional light's as needed.",
+                "pr": "17466",
+                "title": "Geospatial Camera Keyboard Inputs and PinchToZoom",
+                "description": "- Add keyboard inputs for geocam (pan/rotate/zoom)\r\n- Add pinchToZoom touch functionality\r\n\r\n#17451 ",
                 "author": {
-                    "name": "docEdub",
-                    "url": "https://github.com/docEdub"
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
                 },
                 "files": [
-                    "packages/dev/core/src/XR/features/WebXRLightEstimation.ts"
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraKeyboardInput.ts",
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraPointersInput.ts",
+                    "packages/dev/core/src/Cameras/geospatialCamera.ts",
+                    "packages/dev/core/src/Cameras/geospatialCameraInputsManager.ts"
                 ],
                 "tags": [
-                    "new feature"
+                    "new feature",
+                    "camera"
                 ]
             },
             {
-                "pr": "17411",
-                "title": "NativeEngine: Support Blob in createImageBitmap",
-                "description": "This PR adds handling for a Blob object in createImageBitmap.\r\n\r\nWe should probably outright remove the Blob hack from here, but just to quickly & safely unblock [these other changes](https://github.com/BabylonJS/BabylonNative/pull/1565), I hope this is alright.",
+                "pr": "17445",
+                "title": "Move flow graph math functions into flow graph for now",
+                "description": null,
                 "author": {
-                    "name": "alexchuber",
-                    "url": "https://github.com/alexchuber"
+                    "name": "bghgary",
+                    "url": "https://github.com/bghgary"
                 },
                 "files": [
-                    "packages/dev/core/src/Engines/Native/nativeInterfaces.ts",
-                    "packages/dev/core/src/Engines/nativeEngine.ts"
+                    "packages/dev/core/src/FlowGraph/Blocks/Data/Math/flowGraphVectorMathBlocks.ts",
+                    "packages/dev/core/src/FlowGraph/flowGraphMath.ts",
+                    "packages/dev/core/src/Maths/math.vector.functions.ts",
+                    "packages/dev/loaders/test/unit/Interactivity/interactivity.math nodes.test.ts"
+                ],
+                "tags": [
+                    "skip changelog"
+                ]
+            },
+            {
+                "pr": "17467",
+                "title": "Particles color",
+                "description": "- Adds support to migrate color gradients.\r\n- Updates gradient functions to handle ColorGradient or FactorGradient values.\r\n- Fixes an issue with alpha clamp on gradients.\r\n\r\nPG to test: #ZRZJ02#2\r\nPG to test: #ZRZJ02#5\r\n<img width=\"2098\" height=\"1130\" alt=\"image\" src=\"https://github.com/user-attachments/assets/572cfcb9-5afe-462e-8891-fa8fc3c79f6e\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.function.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "enhancement",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17459",
+                "title": "GeospatialCameraMovement holds globe panning logic (vs in pointerInput). Expose geocam yaw/pitch/radius/center",
+                "description": "- GeospatialPointerInputs is now solely responsible for pixeldelta accumulation, rather than complex geospatial movement logic (also allows keyboard input to share panning /zooming / rotating logic, coming in next PR). That logic is moved into GeospatialCameraMovement \r\n- Also moved zoom ray logic into movement class\r\n- Moved limits into GeospatialLimits\r\n- Camera supports new movements-- based on yaw/pitch/radius as opposed to the previous approach of correcting rotation / translation \r\n\r\nhttps://github.com/BabylonJS/Babylon.js/issues/17451 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraMouseWheelInput.ts",
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraPointersInput.ts",
+                    "packages/dev/core/src/Cameras/Limits/geospatialLimits.ts",
+                    "packages/dev/core/src/Cameras/cameraMovement.ts",
+                    "packages/dev/core/src/Cameras/geospatialCamera.ts",
+                    "packages/dev/core/src/Cameras/geospatialCameraMovement.ts",
+                    "packages/dev/core/src/Maths/math.vector.functions.ts"
                 ],
                 "tags": []
             },
             {
-                "pr": "17414",
-                "title": "Fix bug when action conditions are not met but cursor is changed",
+                "pr": "17465",
+                "title": "Fix location for scaled direction for pp",
                 "description": null,
                 "author": {
                     "name": "deltakosh",
                     "url": "https://github.com/deltakosh"
                 },
                 "files": [
-                    "packages/dev/core/src/Actions/action.ts",
-                    "packages/dev/core/src/Actions/actionManager.ts"
+                    "packages/dev/core/src/Particles/Node/Blocks/Update/basicPositionUpdateBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/particle.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.function.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.ts"
                 ],
                 "tags": [
-                    "bug"
+                    "skip changelog"
                 ]
             },
             {
-                "pr": "17405",
-                "title": "Adjust documentation comment of `AssetContainer.addAllAssetsToContainer`",
-                "description": "As far as I can tell, this does not actually add animation groups to the asset container.",
-                "author": {
-                    "name": "kv-bh",
-                    "url": "https://github.com/kv-bh"
-                },
-                "files": [
-                    "packages/dev/core/src/assetContainer.ts"
-                ],
-                "tags": []
-            },
-            {
-                "pr": "17413",
-                "title": "Improve perf of eyePosition binding by removing check for mirroredCameraPosition",
-                "description": "Rather than having eyePosition binding check both mirroredCameraPosition and forcedViewPosition (happens for every scene on every frame) we can instead just check forcedViewPosition (so long as the places where we set mirroredCameraPosition are also setting forcedViewPosition).\r\n\r\nNote that mirroredCameraPosition (set by MirrorTexture and WaterMaterial) is used for setting various uniforms including eyePosition, while forcedViewPosition is only used for setting the eyePosition. \r\n\r\nEyePosition binding happens far more often than mirroring textures so its more important that this is optimized.",
-                "author": {
-                    "name": "georginahalpern",
-                    "url": "https://github.com/georginahalpern"
-                },
-                "files": [
-                    "packages/dev/core/src/Materials/Textures/mirrorTexture.ts",
-                    "packages/dev/core/src/scene.ts",
-                    "packages/dev/materials/src/water/waterMaterial.ts"
-                ],
-                "tags": []
-            },
-            {
-                "pr": "17412",
-                "title": "Animation: Fix wrong value at end of animation",
-                "description": "See https://forum.babylonjs.com/t/animations-with-animationloopmode-constant-behave-weird/61320\r\n\r\nIt looks like a bug to me, what do you think?",
-                "author": {
-                    "name": "Popov72",
-                    "url": "https://github.com/Popov72"
-                },
-                "files": [
-                    "packages/dev/core/src/Animations/runtimeAnimation.ts"
-                ],
-                "tags": [
-                    "bug",
-                    "animations"
-                ]
-            },
-            {
-                "pr": "17410",
-                "title": "Fixing initial particle size",
-                "description": null,
+                "pr": "17458",
+                "title": "Particles angularSpeedGradients",
+                "description": "Adds migration support for _angularSpeedGradients and updates angle calculations.\r\nAlso some minor cleanup on the helper code.\r\n\r\nPG to test: #0K3AQ2#3735\r\nPG to test: #0K3AQ2#3737\r\n<img width=\"1286\" height=\"708\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a2cce14d-d164-4f6d-96f9-4d0ad1f670db\" />\r\n",
                 "author": {
                     "name": "VicenteCartas",
                     "url": "https://github.com/VicenteCartas"
                 },
                 "files": [
-                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/createParticleBlock.ts"
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
                 ],
                 "tags": [
-                    "bug"
+                    "enhancement",
+                    "npe"
                 ]
             },
             {
-                "pr": "17409",
-                "title": "Dispose sound instances when they stop playing",
+                "pr": "17464",
+                "title": "Moved to Manifold 3.3.0",
                 "description": null,
                 "author": {
-                    "name": "docEdub",
-                    "url": "https://github.com/docEdub"
+                    "name": "deltakosh",
+                    "url": "https://github.com/deltakosh"
                 },
                 "files": [
-                    "packages/dev/core/src/AudioV2/abstractAudio/abstractSound.ts",
-                    "packages/dev/core/src/AudioV2/webAudio/webAudioStaticSound.ts"
+                    "packages/dev/core/src/Meshes/csg2.ts"
                 ],
                 "tags": [
-                    "bug",
-                    "audio"
+                    "skip changelog"
                 ]
             },
             {
-                "pr": "17407",
-                "title": "Remove redundant _isDirty sets",
-                "description": "Vector **classes** already set _isDirty to true when setting individual properties like `x`, `y`, and `z`, so the _isDirty handling from the previous change is not actually needed. Keeping the tests but removing the _isDirty-related validation.",
+                "pr": "17450",
+                "title": "Hook up Tools.PerformanceLogLevel / Tools.StartPerformanceCounter / Tools.EndPerformanceCounter to Babylon Native counterparts",
+                "description": "NativeTracing has been partially implemented in Babylon Native for a long time. These changes hook up the Babylon.js perf tracing related APIs in Tools to the Babylon Native tracing APIs. This extra functionality will only execute in the context of Babylon Native, and is resilient to older versions of Babylon Native. For these changes to fully work, they need https://github.com/BabylonJS/BabylonNative/pull/1569.\r\n\r\nCouple additional changes related to our native interfaces:\r\n- I did a little bit of cleanup on the `INative` interface to make it more type safe\r\n- ~I added a declation for the `_native` global in `INativeInterfaces.ts`, which makes it visible globally everywhere so it doesn't have to be redeclared in every file it is used in. However, I declared it as potentially undefined (since it is), so I didn't touch a few files that already declared it as non nullable (like NativeEngine) as there would be a ton of changes and I didn't want this PR to get too overloaded.~ Never mind, not in the mood to battle the custom umd type declaration generation script today.",
                 "author": {
-                    "name": "kircher1",
-                    "url": "https://github.com/kircher1"
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
                 },
                 "files": [
-                    "packages/dev/core/src/Maths/math.like.ts",
-                    "packages/dev/core/src/Maths/math.vector.functions.ts",
-                    "packages/dev/core/test/unit/Math/babylon.math.vector.functions.test.ts"
+                    "packages/dev/core/src/Engines/Native/nativeInterfaces.ts",
+                    "packages/dev/core/src/Engines/nativeEngine.ts",
+                    "packages/dev/core/src/Misc/fileTools.ts",
+                    "packages/dev/core/src/Misc/tools.ts"
                 ],
                 "tags": []
             },
             {
-                "pr": "17408",
-                "title": "FrameGraph: misc improvements",
-                "description": "In this PR:\r\n* Fix default values for some node render graph properties\r\n* Add missing properties to node render graph post processes\r\n* Add **viewport** property to post-process and copyToTexture tasks\r\n* Add onBefore and onAfter task execution observables",
+                "pr": "17442",
+                "title": "GS Splat batch size",
+                "description": "16 splats per instance",
+                "author": {
+                    "name": "CedricGuillemet",
+                    "url": "https://github.com/CedricGuillemet"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/GaussianSplatting/gaussianSplattingMaterial.ts",
+                    "packages/dev/core/src/Materials/Node/Blocks/GaussianSplatting/gaussianSplattingBlock.ts",
+                    "packages/dev/core/src/Materials/Node/Blocks/GaussianSplatting/splatReaderBlock.ts",
+                    "packages/dev/core/src/Meshes/GaussianSplatting/gaussianSplattingMesh.ts",
+                    "packages/dev/core/src/Meshes/thinInstanceMesh.ts",
+                    "packages/dev/core/src/Shaders/ShadersInclude/gaussianSplatting.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/gaussianSplattingUboDeclaration.fx",
+                    "packages/dev/core/src/Shaders/ShadersInclude/gaussianSplattingVertexDeclaration.fx",
+                    "packages/dev/core/src/Shaders/gaussianSplatting.vertex.fx",
+                    "packages/dev/core/src/Shaders/gaussianSplattingDepth.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/gaussianSplatting.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/gaussianSplattingUboDeclaration.fx",
+                    "packages/dev/core/src/ShadersWGSL/ShadersInclude/gaussianSplattingVertexDeclaration.fx",
+                    "packages/dev/core/src/ShadersWGSL/gaussianSplatting.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/gaussianSplattingDepth.vertex.fx"
+                ],
+                "tags": [
+                    "Gaussian Splatting"
+                ]
+            },
+            {
+                "pr": "17460",
+                "title": "Inspector v2: Prevent double inspectors, actually track inspector dispose tokens, and make sure AnimationGroup.dispose fires observable",
+                "description": "This PR has 3 fixes addressing 2 bugs reported by users:\r\n1. Add a guard in Sandbox to make a call to show inspector a no-op if it is already shown.\r\n2. Actually track the inspector dispose tokens in Inspector v2 (it has a map, but somehow the final iteration of my earlier changes did not actually add the inspector dispose tokens to the map 🤦🏻‍♂️).\r\n3. Fix a bug in AnimationGroup that is unrelated to Inspector v2 but that is one place where you can see the bug. Specifically, the AnimationGroup dispose function just removes the AnimationGroup from the scene, it does not call the removeAnimationGroup function and therefore the associated observable does not actually fire. In Inspector v2, this means it stays in scene explorer even after being disposed.",
+                "author": {
+                    "name": "ryantrem",
+                    "url": "https://github.com/ryantrem"
+                },
+                "files": [
+                    "packages/dev/core/src/Animations/animationGroup.ts",
+                    "packages/dev/inspector-v2/src/inspector.tsx",
+                    "packages/tools/sandbox/src/globalState.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "inspector"
+                ]
+            },
+            {
+                "pr": "17462",
+                "title": "Fixed using instanced VAT in ShaderMaterial",
+                "description": "This PR resolves the issue https://forum.babylonjs.com/t/missing-doc-for-gpupicker-in-v8-31-3/61295/8\r\n\r\nI noticed that `PrepareAttributesForBakedVertexAnimation` does not function correctly in `ShaderMaterial`. The reason is as follows:\r\n\r\nhttps://github.com/BabylonJS/Babylon.js/blob/master/packages/dev/core/src/Materials/materialHelper.functions.ts#L415\r\n```\r\nconst enabled = defines[\"BAKED_VERTEX_ANIMATION_TEXTURE\"] && defines[\"INSTANCES\"];\r\n\r\nif (enabled) {\r\n    attribs.push(\"bakedVertexAnimationSettingsInstanced\");\r\n}\r\n```\r\n\r\n`PrepareAttributesForBakedVertexAnimation` checks whether `BAKED_VERTEX_ANIMATION_TEXTURE` and `INSTANCES` exist in the defines to determine whether to add the `bakedVertexAnimationSettingsInstanced` attribute to the list.\r\n\r\nHowever, `ShaderMaterial` stores the define list as a sequence of `“#define DEFINENAME”` entries, causing it to fail this test.\r\n\r\n<img width=\"847\" height=\"379\" alt=\"image\" src=\"https://github.com/user-attachments/assets/36c2d576-334e-4486-8786-d92f8637f7d0\" />\r\nThis is what it actually looks like when executed on the `ShaderMaterial` in the Edge debugger.\r\n\r\nTherefore, I specialized this logic to suit `ShaderMaterial`.\r\n\r\nThis approach was chosen based on the observation that specialization had already been performed in the logic for assigning Bone's Define and Attribute within `ShaderMaterial`.",
+                "author": {
+                    "name": "noname0310",
+                    "url": "https://github.com/noname0310"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/shaderMaterial.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17452",
+                "title": "Add CameraMovement class and interpolating behavior",
+                "description": "Design is:\r\n- camera input class modifies cameraMovement.pixelDeltas\r\n- cameraMovement has computeCurrentFrameDeltas() function which turns pixel delta into currentFrameFooDelta, taking speed/framerate/limits into account\r\n- camera class calls computeCurrentFrameDeltas() on each frame, and then responds to the newly accumulated currentFrameFooDeltas to modify viewmatrix\r\n\r\n\r\nWill be extended by GeospatialCameraMovement to include the logic specific to navigating a globe in next PR\r\n\r\nIdea is that other cameras can extend cameramovement as well so that the logic around speed/inertia/pixel deltas are consolidated to 1 place\r\n\r\n\r\nInterpolatingBehavior can be used to animate camera properties and will be interrupted with any active input (like the interpolateTo in arcrotatecamera)\r\n\r\n#17451 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Behaviors/Cameras/interpolatingBehavior.ts",
+                    "packages/dev/core/src/Cameras/cameraMovement.ts"
+                ],
+                "tags": [
+                    "camera"
+                ]
+            },
+            {
+                "pr": "17456",
+                "title": "Particles startSizeGradient",
+                "description": "Adds support to migrate _startSizeGradient.\r\n\r\nPG to test: #KQ4J5M\r\n<img width=\"795\" height=\"476\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9a16dea8-94dd-4f19-965d-748d58d29264\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "enhancement",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17455",
+                "title": "New blocks and support for size gradients",
+                "description": "This PR adds:\r\n- A new updateSize block to update the size of a particle.\r\n- A new contextual value to expose the current particle size.\r\n- A new mode for RandomBlock: OncePerParticle that evaluates a random value once per particle in a system. This is required for gradients that have two factors, as the random value between the two factors needs to be used in multiple updates.\r\n- Support for migrating _sizeGradients, both during the creation phase and the update phase.\r\n\r\nPR to test: #0K3AQ2#3730\r\n<img width=\"2056\" height=\"1204\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a8ad7751-7a6f-4d34-b29e-1a02cbb43dcd\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Update/basicColorUpdateBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Update/basicPositionUpdateBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Update/updateSizeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/index.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/particleInputBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/particleRandomBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/Enums/nodeParticleContextualSources.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleBuildState.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.ts",
+                    "packages/tools/nodeParticleEditor/src/blockTools.ts",
+                    "packages/tools/nodeParticleEditor/src/components/nodeList/nodeListComponent.tsx",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/display/inputDisplayManager.ts",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/properties/inputNodePropertyComponent.tsx",
+                    "packages/tools/nodeParticleEditor/src/graphSystem/registerToDisplayLedger.ts"
+                ],
+                "tags": [
+                    "enhancement",
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17453",
+                "title": "Move arcrotate's multiTouch logic into BasePointerInput",
+                "description": "This is so that geospatialcamera can use the multitouch logic and not rewrite it \r\n\r\nAssociated with https://github.com/BabylonJS/Babylon.js/issues/17451 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Cameras/Inputs/arcRotateCameraPointersInput.ts",
+                    "packages/dev/core/src/Cameras/Inputs/geospatialCameraPointersInput.ts",
+                    "packages/dev/core/src/Cameras/Inputs/orbitCameraPointersInput.ts"
+                ],
+                "tags": [
+                    "camera"
+                ]
+            },
+            {
+                "pr": "17449",
+                "title": "Adding gradients support for lifetime",
+                "description": "- targetStopDuration is now a block input for SystemBlock\r\n- Adds functions to generate gradients from FactorValues\r\n- Introduces a ConversionContext object to make sure that certain blocks are re-used in the graph instead of being regenerated constantly.\r\n\r\nPG to test: #0K3AQ2#3727\r\nPG to test: #H4GGRI\r\n\r\nRatio block group\r\n<img width=\"1375\" height=\"879\" alt=\"NewRatio\" src=\"https://github.com/user-attachments/assets/788d1d1d-c197-43d6-9787-4f9a9eb82dde\" />\r\n\r\nGradients block group\r\n<img width=\"560\" height=\"668\" alt=\"LifetimeGradients\" src=\"https://github.com/user-attachments/assets/e8a4d336-c35d-4c08-a78c-5584ac163cfc\" />",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts",
+                    "packages/dev/core/src/Particles/thinParticleSystem.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17447",
+                "title": "FrameGraph: improved support for MSAA (resolve) textures + renaming of CullPass to ObjectListPass",
+                "description": "I also added the ability to set an `InternalTexture` texture in `ShaderMaterial`, to avoid wrapping it to a `BaseTexture`.",
                 "author": {
                     "name": "Popov72",
                     "url": "https://github.com/Popov72"
                 },
                 "files": [
                     "packages/dev/core/src/Decorators/nodeDecorator.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/anaglyphPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/basePostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/baseWithPropertiesPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/blackAndWhitePostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/blurPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/chromaticAberrationPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/circleOfConfusionPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/colorCorrectionPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/convolutionPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/extractHighlightsPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/filterPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/fxaaPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/grainPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/imageProcessingPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/motionBlurPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/passPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/screenSpaceCurvaturePostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/sharpenPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/taaPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/tonemapPostProcessBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Node/Blocks/Textures/copyTextureBlock.ts",
-                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/postProcessTask.ts",
-                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/taaTask.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Rendering/baseObjectRendererBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Rendering/geometryRendererBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Textures/clearBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Textures/generateMipmapsBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/nodeRenderGraph.ts",
+                    "packages/dev/core/src/FrameGraph/Passes/objectListPass.ts",
+                    "packages/dev/core/src/FrameGraph/Passes/renderPass.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Misc/cullObjectsTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/geometryRendererTask.ts",
                     "packages/dev/core/src/FrameGraph/Tasks/Rendering/objectRendererTask.ts",
-                    "packages/dev/core/src/FrameGraph/Tasks/Texture/copyToTextureTask.ts",
-                    "packages/dev/core/src/FrameGraph/frameGraphContext.ts",
-                    "packages/dev/core/src/FrameGraph/frameGraphRenderContext.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Texture/clearTextureTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraph.ts",
                     "packages/dev/core/src/FrameGraph/frameGraphTask.ts",
-                    "packages/dev/core/src/Misc/copyTextureToTexture.ts",
+                    "packages/dev/core/src/FrameGraph/index.ts",
+                    "packages/dev/core/src/Materials/shaderMaterial.ts",
                     "packages/tools/nodeRenderGraphEditor/src/graphSystem/properties/genericNodePropertyComponent.tsx"
                 ],
                 "tags": [
-                    "new feature",
+                    "enhancement",
                     "frame graph"
                 ]
             },
             {
-                "pr": "17406",
-                "title": "Add support for Sprites",
-                "description": "Offset sprites position in vertex buffer data (as sprites.vertex shader doesn't use world matrix)\r\n\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17406/merge#P3E9YP#287 ",
+                "pr": "17448",
+                "title": "WebGPU: Fix updating compressed textures",
+                "description": "See https://forum.babylonjs.com/t/compressed-textures-array-doesnt-work-with-webgpu/61410.",
                 "author": {
-                    "name": "georginahalpern",
-                    "url": "https://github.com/georginahalpern"
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
                 },
                 "files": [
-                    "packages/dev/core/src/Sprites/spriteRenderer.ts"
+                    "packages/dev/core/src/Engines/WebGPU/webgpuTextureManager.ts"
                 ],
                 "tags": [
-                    "new feature"
+                    "bug",
+                    "WebGPU"
                 ]
             },
             {
-                "pr": "17396",
-                "title": "Support multi-object raycasting for havok",
-                "description": "We use multi-object raycasting to see if a trigger is in view, but it can be useful in other ways too (for example, guns that shoot through multiple enemies).\r\n\r\nLet me know if this API is a good fit for Babylon.js. Another approach could be to create a new `raycastMulti` function in `HavokPlugin`, and reimplement `raycast` as a thin wrapper over it.\r\n\r\nOne possible concern is if a developer sets `maxQueryCollectorHits` to a high number, it will affect *all* raycasts, not just multi-casts. We could perhaps create a separate `queryCollector` for multi-cast use only?",
+                "pr": "17446",
+                "title": "Particles directed cone emitter",
+                "description": "Adds direction support for ConeShapeBlock. DirectionRandomizer will be used unless both direction1 and direction2 are assigned.\r\n\r\nPG to test: #UL4WC0#117\r\n<img width=\"1018\" height=\"861\" alt=\"image\" src=\"https://github.com/user-attachments/assets/ea552c78-f28b-4d96-8833-f11f4d771b3a\" />\r\n",
                 "author": {
-                    "name": "lwp-joel",
-                    "url": "https://github.com/lwp-joel"
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
                 },
                 "files": [
-                    "packages/dev/core/src/Physics/v2/IPhysicsEnginePlugin.ts",
-                    "packages/dev/core/src/Physics/v2/Plugins/havokPlugin.ts",
-                    "packages/dev/core/src/Physics/v2/physicsEngine.ts"
-                ],
-                "tags": []
-            },
-            {
-                "pr": "17404",
-                "title": "GPUPicker: Fix picking ID precision issues",
-                "description": "Resolves the issue:\r\nhttps://forum.babylonjs.com/t/missing-doc-for-gpupicker-in-v8-31-3/61295/5\r\n\r\nWhat I found while examining this issue is that\r\n\r\nwhen outputting values received as uniform variables in the shader to the screen,\r\nthe uniform values were displayed completely without error,\r\n\r\nbut values received as attributes exhibited errors.\r\n\r\nI don't know the exact reason for this, as it is an internal WebGL implementation detail.\r\nThrough experimentation, I found a safe `MaxPickingId` value usable across WebGL, WebGL2, and WebGPU.\r\nI confirmed that adding 0.5 at the point of casting from int resolves this precision issue.",
-                "author": {
-                    "name": "noname0310",
-                    "url": "https://github.com/noname0310"
-                },
-                "files": [
-                    "packages/dev/core/src/Collisions/gpuPicker.ts",
-                    "packages/dev/core/src/Shaders/picking.fragment.fx",
-                    "packages/dev/core/src/Shaders/picking.vertex.fx",
-                    "packages/dev/core/src/ShadersWGSL/picking.fragment.fx",
-                    "packages/dev/core/src/ShadersWGSL/picking.vertex.fx"
+                    "packages/dev/core/src/Particles/EmitterTypes/coneParticleEmitter.ts",
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/coneShapeBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
                 ],
                 "tags": []
             }
@@ -711,6 +1094,254 @@
                     "new feature",
                     "npe"
                 ]
+            }
+        ],
+        "8.36.1": [
+            {
+                "pr": "17416",
+                "title": "Adding Gravity to the NPE migration tool",
+                "description": "Adds the gravity part of the particle update.\r\n\r\nPG to test: #0K3AQ2#3693\r\n<img width=\"941\" height=\"688\" alt=\"image\" src=\"https://github.com/user-attachments/assets/494653c7-abba-42f9-a16e-2232c2006285\" />\r\n",
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/systemBlock.ts",
+                    "packages/dev/core/src/Particles/Node/nodeParticleSystemSet.helper.ts"
+                ],
+                "tags": [
+                    "new feature",
+                    "npe"
+                ]
+            },
+            {
+                "pr": "17415",
+                "title": "Add WebXR light estimation intensity factor",
+                "description": "The WebXR light estimation directional light's intensity is set directly from the intensity returned by the device's XR implementation, which is too light or dark for some applications.\r\n\r\nThis change adds a `directionalLightIntensityFactor` setting to the `WebXRLightEstimation` feature to adjust the directional light's as needed.",
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/XR/features/WebXRLightEstimation.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17411",
+                "title": "NativeEngine: Support Blob in createImageBitmap",
+                "description": "This PR adds handling for a Blob object in createImageBitmap.\r\n\r\nWe should probably outright remove the Blob hack from here, but just to quickly & safely unblock [these other changes](https://github.com/BabylonJS/BabylonNative/pull/1565), I hope this is alright.",
+                "author": {
+                    "name": "alexchuber",
+                    "url": "https://github.com/alexchuber"
+                },
+                "files": [
+                    "packages/dev/core/src/Engines/Native/nativeInterfaces.ts",
+                    "packages/dev/core/src/Engines/nativeEngine.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17414",
+                "title": "Fix bug when action conditions are not met but cursor is changed",
+                "description": null,
+                "author": {
+                    "name": "deltakosh",
+                    "url": "https://github.com/deltakosh"
+                },
+                "files": [
+                    "packages/dev/core/src/Actions/action.ts",
+                    "packages/dev/core/src/Actions/actionManager.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17405",
+                "title": "Adjust documentation comment of `AssetContainer.addAllAssetsToContainer`",
+                "description": "As far as I can tell, this does not actually add animation groups to the asset container.",
+                "author": {
+                    "name": "kv-bh",
+                    "url": "https://github.com/kv-bh"
+                },
+                "files": [
+                    "packages/dev/core/src/assetContainer.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17413",
+                "title": "Improve perf of eyePosition binding by removing check for mirroredCameraPosition",
+                "description": "Rather than having eyePosition binding check both mirroredCameraPosition and forcedViewPosition (happens for every scene on every frame) we can instead just check forcedViewPosition (so long as the places where we set mirroredCameraPosition are also setting forcedViewPosition).\r\n\r\nNote that mirroredCameraPosition (set by MirrorTexture and WaterMaterial) is used for setting various uniforms including eyePosition, while forcedViewPosition is only used for setting the eyePosition. \r\n\r\nEyePosition binding happens far more often than mirroring textures so its more important that this is optimized.",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Materials/Textures/mirrorTexture.ts",
+                    "packages/dev/core/src/scene.ts",
+                    "packages/dev/materials/src/water/waterMaterial.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17412",
+                "title": "Animation: Fix wrong value at end of animation",
+                "description": "See https://forum.babylonjs.com/t/animations-with-animationloopmode-constant-behave-weird/61320\r\n\r\nIt looks like a bug to me, what do you think?",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Animations/runtimeAnimation.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "animations"
+                ]
+            },
+            {
+                "pr": "17410",
+                "title": "Fixing initial particle size",
+                "description": null,
+                "author": {
+                    "name": "VicenteCartas",
+                    "url": "https://github.com/VicenteCartas"
+                },
+                "files": [
+                    "packages/dev/core/src/Particles/Node/Blocks/Emitters/createParticleBlock.ts"
+                ],
+                "tags": [
+                    "bug"
+                ]
+            },
+            {
+                "pr": "17409",
+                "title": "Dispose sound instances when they stop playing",
+                "description": null,
+                "author": {
+                    "name": "docEdub",
+                    "url": "https://github.com/docEdub"
+                },
+                "files": [
+                    "packages/dev/core/src/AudioV2/abstractAudio/abstractSound.ts",
+                    "packages/dev/core/src/AudioV2/webAudio/webAudioStaticSound.ts"
+                ],
+                "tags": [
+                    "bug",
+                    "audio"
+                ]
+            },
+            {
+                "pr": "17407",
+                "title": "Remove redundant _isDirty sets",
+                "description": "Vector **classes** already set _isDirty to true when setting individual properties like `x`, `y`, and `z`, so the _isDirty handling from the previous change is not actually needed. Keeping the tests but removing the _isDirty-related validation.",
+                "author": {
+                    "name": "kircher1",
+                    "url": "https://github.com/kircher1"
+                },
+                "files": [
+                    "packages/dev/core/src/Maths/math.like.ts",
+                    "packages/dev/core/src/Maths/math.vector.functions.ts",
+                    "packages/dev/core/test/unit/Math/babylon.math.vector.functions.test.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17408",
+                "title": "FrameGraph: misc improvements",
+                "description": "In this PR:\r\n* Fix default values for some node render graph properties\r\n* Add missing properties to node render graph post processes\r\n* Add **viewport** property to post-process and copyToTexture tasks\r\n* Add onBefore and onAfter task execution observables",
+                "author": {
+                    "name": "Popov72",
+                    "url": "https://github.com/Popov72"
+                },
+                "files": [
+                    "packages/dev/core/src/Decorators/nodeDecorator.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/anaglyphPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/basePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/baseWithPropertiesPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/blackAndWhitePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/blurPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/chromaticAberrationPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/circleOfConfusionPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/colorCorrectionPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/convolutionPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/extractHighlightsPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/filterPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/fxaaPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/grainPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/imageProcessingPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/motionBlurPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/passPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/screenSpaceCurvaturePostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/sharpenPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/taaPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/PostProcesses/tonemapPostProcessBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Node/Blocks/Textures/copyTextureBlock.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/postProcessTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/PostProcesses/taaTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Rendering/objectRendererTask.ts",
+                    "packages/dev/core/src/FrameGraph/Tasks/Texture/copyToTextureTask.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphContext.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphRenderContext.ts",
+                    "packages/dev/core/src/FrameGraph/frameGraphTask.ts",
+                    "packages/dev/core/src/Misc/copyTextureToTexture.ts",
+                    "packages/tools/nodeRenderGraphEditor/src/graphSystem/properties/genericNodePropertyComponent.tsx"
+                ],
+                "tags": [
+                    "new feature",
+                    "frame graph"
+                ]
+            },
+            {
+                "pr": "17406",
+                "title": "Add support for Sprites",
+                "description": "Offset sprites position in vertex buffer data (as sprites.vertex shader doesn't use world matrix)\r\n\r\nhttps://playground.babylonjs.com/?snapshot=refs/pull/17406/merge#P3E9YP#287 ",
+                "author": {
+                    "name": "georginahalpern",
+                    "url": "https://github.com/georginahalpern"
+                },
+                "files": [
+                    "packages/dev/core/src/Sprites/spriteRenderer.ts"
+                ],
+                "tags": [
+                    "new feature"
+                ]
+            },
+            {
+                "pr": "17396",
+                "title": "Support multi-object raycasting for havok",
+                "description": "We use multi-object raycasting to see if a trigger is in view, but it can be useful in other ways too (for example, guns that shoot through multiple enemies).\r\n\r\nLet me know if this API is a good fit for Babylon.js. Another approach could be to create a new `raycastMulti` function in `HavokPlugin`, and reimplement `raycast` as a thin wrapper over it.\r\n\r\nOne possible concern is if a developer sets `maxQueryCollectorHits` to a high number, it will affect *all* raycasts, not just multi-casts. We could perhaps create a separate `queryCollector` for multi-cast use only?",
+                "author": {
+                    "name": "lwp-joel",
+                    "url": "https://github.com/lwp-joel"
+                },
+                "files": [
+                    "packages/dev/core/src/Physics/v2/IPhysicsEnginePlugin.ts",
+                    "packages/dev/core/src/Physics/v2/Plugins/havokPlugin.ts",
+                    "packages/dev/core/src/Physics/v2/physicsEngine.ts"
+                ],
+                "tags": []
+            },
+            {
+                "pr": "17404",
+                "title": "GPUPicker: Fix picking ID precision issues",
+                "description": "Resolves the issue:\r\nhttps://forum.babylonjs.com/t/missing-doc-for-gpupicker-in-v8-31-3/61295/5\r\n\r\nWhat I found while examining this issue is that\r\n\r\nwhen outputting values received as uniform variables in the shader to the screen,\r\nthe uniform values were displayed completely without error,\r\n\r\nbut values received as attributes exhibited errors.\r\n\r\nI don't know the exact reason for this, as it is an internal WebGL implementation detail.\r\nThrough experimentation, I found a safe `MaxPickingId` value usable across WebGL, WebGL2, and WebGPU.\r\nI confirmed that adding 0.5 at the point of casting from int resolves this precision issue.",
+                "author": {
+                    "name": "noname0310",
+                    "url": "https://github.com/noname0310"
+                },
+                "files": [
+                    "packages/dev/core/src/Collisions/gpuPicker.ts",
+                    "packages/dev/core/src/Shaders/picking.fragment.fx",
+                    "packages/dev/core/src/Shaders/picking.vertex.fx",
+                    "packages/dev/core/src/ShadersWGSL/picking.fragment.fx",
+                    "packages/dev/core/src/ShadersWGSL/picking.vertex.fx"
+                ],
+                "tags": []
             }
         ],
         "8.36.0": [],
